@@ -1,0 +1,5 @@
+- IDEA: That categories are not shown in a selectorbox but as a welcome-screen with category/subcategories (as the Extension Repository does for extensions).
+  - New categories, "ALL" and "UNFILED"
+- IDEA: To use thread-starters as managers of the archive by sending them a reminder email with a link to management. They should be able to clean up message, assign category and check the flag "Was it answered". (However they could be able to manipulate the CONTENT of the thread which is a serious problem since they are not authenticated...!)
+- QP encoding of sender name
+- check, that HTML content is always strip_tags()'ed

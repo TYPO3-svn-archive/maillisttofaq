@@ -1,0 +1,96 @@
+
+plugin.tx_maillisttofaq_pi1 {
+	CMD = 
+	pidList = 
+	
+	  # Integer, the PID where "fe_users" shown with the Mailing List Archive can be shown details for. Details are supposed to be shown by the extension "newloginbox", referred to by the parameters &tx_newloginbox_pi3[returnUrl] and &tx_newloginbox_pi3[showUid].
+	tx_newloginbox_pi3-showUidPid = 
+	  # Stored compressed content
+	storeCompressedOriginalContent = 0
+	  # If this is set the system will try and locate a proper thread for an answer if "Re:" og "Aw:" is detected in the subject line but the "reference" header not set. On the average 3 replies out of 50 mails to the typo3.org english user list had no reference header.
+	enableFinalDesperateTryToLocateThreadBySubject = 1
+}
+plugin.tx_maillisttofaq_pi1.listView {
+	results_at_a_time = 20
+	maxPages = 20
+	  # Probability that mails are transferred from "inmail" table to archive table. Value can be 1-100
+	transfer_probability = 10
+	  # Amount of mails to transfer when 'transfer_probability' allows. 1-200.
+	transfer_amount = 50
+	
+	  # This is the style attribute value used in all textarea and many input fields:
+	textarea_style = width:550px;
+	
+	  # Category Selector box size
+	catSelSize = 5
+	  # Category Selector in top
+	catSelTop = 1
+	  # No header for the category selector box.
+	catSelNoHeader = 0
+	
+	  # If set, then reply messages marked as OT/Hidden will have their headers shown (so you can see they exist). Otherwise not.
+	showHiddenOTmsgHeaders = 0
+		# The number of characters per line in reply text in the reply form.
+	replyIndented_BreakNumChar = 80
+		# Days before messages in the "Unanswered" list expires
+	expireDaysForUnanswered = 7
+	
+		# Enable:
+	lgdIndicator = 1
+		# Limits in characters for states 1,2,3
+	lgdIndicator.limit_1 = 1000
+	lgdIndicator.limit_2 = 2000
+	lgdIndicator.limit_3 = 3000
+	
+	daysBeforeDirectNotificationsWhenReply =7
+}
+plugin.tx_maillisttofaq_pi1.faq_email {
+	admin_email = 
+	admin_name = Name of Admin
+	cc_email = 
+	regards = Regards, 
+}
+plugin.tx_maillisttofaq_pi1.messageDividers {
+  1 = -----Ursprüngliche Nachricht-----
+  2 = ----- Original Message -----
+  3 = -----Oorspronkelijk bericht-----
+}
+
+  # Enable ReadMail:
+plugin.tx_maillisttofaq_pi1.readmail = 0
+plugin.tx_maillisttofaq_pi1.readmail {
+	  # Probability that mails will be read from external source. Zero means it's disabled (then a on-server cron-script must to it). Otherwise value can be 1-100
+	probability = 5
+	  # URL with "?" in end (or parameters). Eg. "http://192.168.230.3/typo3/32/typo3site_dev/1422.0.html?"
+	url = 
+	  # Password, if needed on remote. (Also password for local feed-service.)
+	password = 
+	  # Fetch number of mails:
+	number = 50
+	  # Feed service available?
+	enableFeed = 0
+}
+	
+  # Example of default set CSS styles (these go into the document header):
+plugin.tx_maillisttofaq_pi1._CSS_DEFAULT_STYLE (
+  .tx-maillisttofaq-pi1 .tx-maillisttofaq-pi1-threads P.tx-maillisttofaq-pi1-root { font-weight: bold; margin-top:10px;}
+  .tx-maillisttofaq-pi1 .tx-maillisttofaq-pi1-threads P.tx-maillisttofaq-pi1-lost { color:#666666; font-weight: bold;  margin-top:10px;}
+  .tx-maillisttofaq-pi1 .tx-maillisttofaq-pi1-threads P.tx-maillisttofaq-pi1-child { font-size: 11px;}
+  
+  .tx-maillisttofaq-pi1 .tx-maillisttofaq-pi1-singleView P.tx-maillisttofaq-pi1-author { background-color: #eeeeee;}
+  .tx-maillisttofaq-pi1 .tx-maillisttofaq-pi1-singleView H3.tx-maillisttofaq-pi1-subject { background-color: #ffeeee;}
+  .tx-maillisttofaq-pi1 .tx-maillisttofaq-pi1-singleView DIV.tx-maillisttofaq-pi1-reply {border: dotted 1px #666666; margin-top: 10px; padding: 5px 5px 5px 5px; background-color: #ffffee;}
+  .tx-maillisttofaq-pi1 .tx-maillisttofaq-pi1-singleView DIV.tx-maillisttofaq-pi1-reply P A {text-decoration: underline; color: teal;}   
+  .tx-maillisttofaq-pi1 .tx-maillisttofaq-pi1-singleView P.tx-maillisttofaq-pi1-back A { background-color: #ffeeee; margin: 10px 0px 10px 0px; font-weight: bold;}
+  .tx-maillisttofaq-pi1 .tx-maillisttofaq-pi1-singleView DIV.tx-maillisttofaq-pi1-thrMenu {margin-top: 5px; margin-bottom: 5px;}
+  .tx-maillisttofaq-pi1 .tx-maillisttofaq-pi1-singleView P.tx-maillisttofaq-pi1-child { background-color: #eeeeff; font-size:11px;}
+  .tx-maillisttofaq-pi1 .tx-maillisttofaq-pi1-singleView P.tx-maillisttofaq-pi1-threadLinks { background-color: #eeeeff; font-size:13px; font-weight: bold;}  
+)
+  # Example of how to overrule LOCAL_LANG values for the plugin:
+plugin.tx_maillisttofaq_pi1._LOCAL_LANG.default {
+}
+  # Example of how to set default values from TS in the incoming array, $this->piVars of the plugin:
+plugin.tx_maillisttofaq_pi1._DEFAULT_PI_VARS.sort = mail_date:1
+
+plugin.tx_maillisttofaq_pi1._static_included = 1
+

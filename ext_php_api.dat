@@ -1,0 +1,872 @@
+a:2:{s:4:"meta";a:1:{s:5:"title";s:20:"Mailing List Archive";}s:5:"files";a:1:{s:34:"pi1/class.tx_maillisttofaq_pi1.php";a:2:{s:8:"filesize";i:135837;s:3:"DAT";a:51:{i:1;a:8:{s:6:"header";s:49:"class tx_maillisttofaq_pi1 extends tslib_pibase {";s:5:"class";i:1;s:11:"parentClass";s:20:"tx_maillisttofaq_pi1";s:4:"cDat";a:3:{s:4:"text";s:43:"
+Plugin class for the mailing list archive
+";s:5:"param";a:0:{}s:6:"return";a:2:{i:0;s:6:"[type]";i:1;s:3:"...";}}s:7:"content";a:2:{i:0;s:2203:"
+		// Values set by the listView function, from tt_content record:
+	var $selectField='sender_email';	// The field from the 'inmail' table to select on. This field must be among the ones listed in $this->selectFields
+	var $selectValue='';				// The value that the $this->selectField should match in order to be included in this archive. EG: typo3-owner@netfielders.de
+	var $subjectPrefix='';				// The subject prefix string, used to explode the subject line when creating reply subjects. Eg: '[Typo3]'
+	var $listEmail='';					// List email (where messages are sent to by the reply feature)
+	var $thisPID=0;						// The PID where messages/faq items are stored.
+
+		// used to divide messages for display - trying to remove the original message automatically. Can be extended with other divider strings.	
+	var $messageDividers = array(
+		'-----Original Message-----'
+	);
+	
+		// Internal, fixed:
+	var $prefixId = 'tx_maillisttofaq_pi1';		// Same as class name
+	var $scriptRelPath = 'pi1/class.tx_maillisttofaq_pi1.php';	// Path to this script relative to the extension dir.
+	var $extKey = 'maillisttofaq';	// The extension key.
+	var $selectFields=array(
+		0 => 'sender_email',
+		1 => 'reply_to_email',
+		2 => 'to_email',
+		3 => 'from_email'
+	);
+
+		// Internal, variable:
+	var $cache_fe_user_names=array();		// Storing username ready for output on pages.
+	var $categories=array();				// Storing selected categories from storage folder
+	var $onlineUsers=array();				// Storing [uid]/[rendered username] for online users.
+	var $mailParser;						// Used for the mail parser object instance.
+	var $mList=array();						// List of managers
+	var $sList=array();						// List of supervisors
+	var $stickingElements=array();			// Be loaded with the references to sticking elements for the current fe_user user.
+	var $clip =array();						// Move-thread clipboard
+	var $isManager=0;						// set true if the fe_user is manager.
+	var $insertRecord=0;					// set true if the singleview is triggered by "insert records"
+
+		// Development:
+#	var $LLtestPrefix='##';		// This prefix will be put before all getLL labels - thus makes it easy to find which labels ARE translated and which are not.
+#	var $LLtestPrefixAlt='¤¤';
+	
+	";i:1;i:-1;}s:12:"content_size";i:2203;s:13:"content_lines";i:40;s:6:"atLine";i:107;}i:3;a:7:{s:6:"header";s:31:"function main($content,$conf)	{";s:11:"parentClass";s:20:"tx_maillisttofaq_pi1";s:4:"cDat";a:3:{s:4:"text";s:47:"
+Main function, distributing the display load.
+";s:5:"param";a:2:{i:0;a:2:{i:0;s:6:"string";i:1;s:31:"$content: Blank value. Not used";}i:1;a:2:{i:0;s:5:"array";i:1;s:40:"$conf: TypoScript config for this plugin";}}s:6:"return";a:2:{i:0;s:6:"string";i:1;s:77:"HTML content from this plugin, wrapped in <div>-section with class-attribute.";}}s:7:"content";a:2:{i:0;s:507:"			// If no static template is included, show this error message:
+		if (!$conf["_static_included"])	{
+			return $this->pi_wrapInBaseClass('
+			<div style="border: 1px solid black; background-color: red; padding: 5px 5px 5px 5px;">
+				<p style="color:white;"><strong>Mailing List Archive Plugin is not available for use</strong></p>
+				<p style="color:white;">Before you can
+[...]
+];	// Only ONE page
+					}
+					return $this->pi_wrapInBaseClass($this->listView($content,$conf));
+				}
+			break;
+		}
+	}
+	
+	";i:1;i:1;}s:12:"content_size";i:1895;s:13:"content_lines";i:39;s:6:"atLine";i:155;}i:5;a:7:{s:6:"header";s:35:"function listView($content,$conf)	{";s:11:"parentClass";s:20:"tx_maillisttofaq_pi1";s:4:"cDat";a:3:{s:4:"text";s:42:"
+Creates the listing of archive/faq/howto
+";s:5:"param";a:2:{i:0;a:2:{i:0;s:6:"string";i:1;s:20:"Empty content string";}i:1;a:2:{i:0;s:5:"array";i:1;s:53:"TypoScript options for plugin passed to this function";}}s:6:"return";a:2:{i:0;s:6:"string";i:1;s:12:"HTML-content";}}s:7:"content";a:2:{i:0;s:507:"		$this->conf=$conf;		// Setting the TypoScript passed to this function in $this->conf
+		$this->pi_setPiVarDefaults();
+		$this->pi_USER_INT_obj=1;	// Configuring so caching is not expected. This value means that no cHash params are ever set. We do this, because it's a USER_INT object!
+#		$this->pi_alwaysPrev=-1;
+		$this->pi_loadLL();		// Loading the LOCAL_LANG values
+		$lC
+[...]
+['catSelTop'] ? $this->categoryBox() : '';
+			}
+
+				// Returns the content from the plugin.
+			return $fullTable;
+		}
+	}
+	
+	";i:1;i:1;}s:12:"content_size";i:7822;s:13:"content_lines";i:180;s:6:"atLine";i:202;}i:7;a:7:{s:6:"header";s:26:"function listFAQ_HOWTO()	{";s:11:"parentClass";s:20:"tx_maillisttofaq_pi1";s:4:"cDat";a:3:{s:4:"text";s:41:"
+This will render the FAQ/HOWTO sections
+";s:5:"param";a:0:{}s:6:"return";a:2:{i:0;s:6:"string";i:1;s:12:"HTML content";}}s:7:"content";a:2:{i:0;s:507:"		if ($this->piVars['showUid'])	{	// If a single element should be displayed
+			$therow = $this->pi_getRecord('tx_maillisttofaq_faq',$this->piVars['showUid']);
+			if (is_array($therow))	{
+
+				if (!$this->isManager)	{	// Managers are not registered.
+					$this->updateViewStat('faq',$therow['uid'],$therow['view_stat']);
+				}
+				
+				if ($this->piVars['editFaqUid'])	{
+				
+[...]
+LL('makenewfaq','Make a new FAQ or HOWTO item.'),array('editFaqUid'=>'NEW')).'</p>';
+			}
+		}
+			
+		return $fullTable;
+	}
+	
+	";i:1;i:1;}s:12:"content_size";i:3522;s:13:"content_lines";i:90;s:6:"atLine";i:388;}i:9;a:7:{s:6:"header";s:24:"function listArchive()	{";s:11:"parentClass";s:20:"tx_maillisttofaq_pi1";s:4:"cDat";a:3:{s:4:"text";s:85:"
+This will render the non-FAQ/HOWTO sections (That is the list archive in all modes)
+";s:5:"param";a:0:{}s:6:"return";a:2:{i:0;s:6:"string";i:1;s:12:"HTML content";}}s:7:"content";a:2:{i:0;s:507:"		$this->internal['searchFieldList']='';
+		$this->internal['orderByList']='mail_date,subject,moderated_subject,sender_name,all_replies,all_latest,view_stat,moderator_status';
+
+			// List of fields to select:
+		$this->pi_listFields='subject,mail_date,subject,moderated_subject,sender_name,sender_email,all_replies,all_latest,uid,reply,all_rating,moderator_status,moderator_fe_
+[...]
+['TT']->pull();
+			
+			// Adds the result browser:
+		$fullTable.=$this->pi_list_browseresults();
+
+		return $fullTable;
+	}
+	
+	";i:1;i:1;}s:12:"content_size";i:5122;s:13:"content_lines";i:123;s:6:"atLine";i:484;}i:11;a:7:{s:6:"header";s:26:"function managerStatus()	{";s:11:"parentClass";s:20:"tx_maillisttofaq_pi1";s:4:"cDat";a:3:{s:4:"text";s:64:"
+Will display the status of management of the threads and more.
+";s:5:"param";a:0:{}s:6:"return";a:2:{i:0;s:4:"void";i:1;s:0:"";}}s:7:"content";a:2:{i:0;s:507:"		$thisMidnight = mktime(0,0,0);		// Returns seconds to this midnight date.
+		$weekday = (date('w')-1+7)%7;		// Weekday, monday being 0 (zero), sunday being 6
+		$thisWeekStart = $thisMidnight-$weekday*24*3600;
+		$weeks = 10;
+		
+			// ************************		
+			// Collecting data from the database:
+			// ************************		
+		$dat=array();
+		for($a=$weeks-1;$a>=0;
+[...]
+************************
+	 *
+	 * Functions generating HTML output
+	 *
+	 ***********************************************/
+
+	
+	";i:1;i:1;}s:12:"content_size";i:7850;s:13:"content_lines";i:235;s:6:"atLine";i:613;}i:13;a:8:{s:6:"header";s:28:"function listThreads($res)	{";s:11:"parentClass";s:20:"tx_maillisttofaq_pi1";s:11:"sectionText";a:1:{i:0;s:32:"Functions generating HTML output";}s:4:"cDat";a:3:{s:4:"text";s:124:"
+Returns the expanded-threads view, which is the alternative listing form compared to regular list of only thread starters.
+";s:5:"param";a:1:{i:0;a:2:{i:0;s:7:"pointer";i:1;s:20:"MySQL result pointer";}}s:6:"return";a:2:{i:0;s:6:"string";i:1;s:45:"HTML content for the expanded thread listing.";}}s:7:"content";a:2:{i:0;s:507:"		$rows=array();
+		while($rootRow=mysql_fetch_assoc($res))	{
+			$rows[]='<p'.$this->pi_classParam($rootRow['reply']==0?'root':'lost').'>'.
+					$this->pi_list_linkSingle(htmlspecialchars($this->removeSubjectPrefix($rootRow['subject'])),$rootRow['uid'],0).
+					'</p>';
+
+			$child=array();
+			$children = $this->getChildren($rootRow['uid'],$child,'uid,subject,rating',1,1,1);
+
+[...]
+ildRow['rating']).'</p>';
+			}
+		}
+		return '<div'.$this->pi_classParam('threads').'>'.implode(chr(10),$rows).'</div>';
+	}
+
+	";i:1;i:1;}s:12:"content_size";i:745;s:13:"content_lines";i:16;s:6:"atLine";i:855;}i:15;a:7:{s:6:"header";s:27:"function pi_list_header()	{";s:11:"parentClass";s:20:"tx_maillisttofaq_pi1";s:4:"cDat";a:3:{s:4:"text";s:50:"
+Display a header row for FAQ or ARCHIVE listing.
+";s:5:"param";a:0:{}s:6:"return";a:2:{i:0;s:6:"string";i:1;s:4:"HTML";}}s:7:"content";a:2:{i:0;s:507:"		if ($this->internal['currentTable']=='tx_maillisttofaq_faq')	{
+			return '<tr'.$this->pi_classParam('listrow-header').'>
+					<td><p>'.$this->getFieldHeader_sortLink('crdate',$this->pi_getLL('listarchiv_date','')).'</p></td>
+					<td><p>'.$this->getFieldHeader_sortLink('subject',$this->pi_getLL('listarchiv_subject','')).'</p></td>
+					<td><p>'.$this->getFieldHeader_sort
+[...]
+listrow_flags').'</span></p></td>
+					<td><p>'.$this->getFieldHeader_sortLink('view_stat').'</p></td>
+				</tr>';
+		}
+	}
+	
+	";i:1;i:1;}s:12:"content_size";i:1585;s:13:"content_lines";i:26;s:6:"atLine";i:877;}i:17;a:7:{s:6:"header";s:26:"function pi_list_row($c)	{";s:11:"parentClass";s:20:"tx_maillisttofaq_pi1";s:4:"cDat";a:3:{s:4:"text";s:77:"
+Display a single row in the normal list view of either FAQ or ARCHIVE items
+";s:5:"param";a:1:{i:0;a:2:{i:0;s:7:"integer";i:1;s:31:"Count (row-number on this page)";}}s:6:"return";a:2:{i:0;s:6:"string";i:1;s:24:"HTML content, table row.";}}s:7:"content";a:2:{i:0;s:507:"			// Get 'editPanel' if available.
+		$editPanel = $this->pi_getEditPanel();
+		if ($editPanel)	$editPanel='<td>'.$editPanel.'</td>';
+		
+			// FAQ item? THen process that.
+		if ($this->internal['currentTable']=='tx_maillisttofaq_faq')	{
+			$showUserUidPid=intval($this->conf['tx_newloginbox_pi3-showUidPid']);
+			return '<tr'.($c%2 ? $this->pi_classParam('listrow-odd') : '').
+[...]
+urrentRow']['view_stat']?$this->internal['currentRow']['view_stat']:'-').'</p></td>
+					'.$editPanel.'
+				</tr>';
+		}
+	}
+
+	";i:1;i:1;}s:12:"content_size";i:6434;s:13:"content_lines";i:78;s:6:"atLine";i:910;}i:19;a:7:{s:6:"header";s:30:"function pi_list_searchBox()	{";s:11:"parentClass";s:20:"tx_maillisttofaq_pi1";s:4:"cDat";a:3:{s:4:"text";s:119:"
+Returns a Search box for the listing (for both FAQ or ARCHIVE listing)
+Extends the original function in pibase class.
+";s:5:"param";a:0:{}s:6:"return";a:2:{i:0;s:6:"string";i:1;s:72:"HTML-string with a search box for the archive, both mailing list and FAQ";}}s:7:"content";a:2:{i:0;s:507:"			// Search box design:
+		$sTables = '<div'.$this->pi_classParam('searchbox').'><table>
+			<form action="'.t3lib_div::getIndpEnv('REQUEST_URI').'" method="post">
+			<tr>
+				<td><input type="text" name="'.$this->prefixId.'[sword]" value="'.htmlspecialchars($this->piVars['sword']).'"'.$this->pi_classParam('searchbox-sword').'></td>
+				<td><input type="submit" name="_submi
+[...]
+x_search_answered','Only answered or rated posts')).'
+					</td>
+			</tr></form>
+			</table></div>';
+		return $sTables;
+	}
+
+	";i:1;i:1;}s:12:"content_size";i:996;s:13:"content_lines";i:16;s:6:"atLine";i:995;}i:21;a:7:{s:6:"header";s:24:"function categoryBox()	{";s:11:"parentClass";s:20:"tx_maillisttofaq_pi1";s:4:"cDat";a:3:{s:4:"text";s:31:"
+Returns a select category box
+";s:5:"param";a:0:{}s:6:"return";a:2:{i:0;s:6:"string";i:1;s:39:"HTML string with category selector box.";}}s:7:"content";a:2:{i:0;s:507:"		// Making category selector:
+		$selOptions=is_array($this->piVars['DATA']['selcat'])?$this->piVars['DATA']['selcat']:array();
+		$opt=array();
+		$opt[]='<option value="0"></option>';
+		reset($this->categories);
+
+		$GLOBALS['TT']->push('CatBoxNumbers');
+
+			// Get counts into data array
+		$countDat=array();
+		if (($this->piVars['mode']==4 || $this->piVars['mode']==5))	{	//
+[...]
+ategories')).'"'.$this->pi_classParam('searchbox-button').'></td>
+		</tr></form>
+		</table></div>';
+		return $sTables;
+	}
+	
+	";i:1;i:1;}s:12:"content_size";i:2171;s:13:"content_lines";i:56;s:6:"atLine";i:1017;}i:23;a:7:{s:6:"header";s:37:"function singleView($content,$conf)	{";s:11:"parentClass";s:20:"tx_maillisttofaq_pi1";s:4:"cDat";a:3:{s:4:"text";s:147:"
+Display single thread.
+Called both when a thread is displayed from the listing and when a single-item is displayed by the insert-records feature.
+";s:5:"param";a:2:{i:0;a:2:{i:0;s:6:"string";i:1;s:74:"Formalized content variable - not just, just pass blank value or whatever.";}i:1;a:2:{i:0;s:5:"array";i:1;s:38:"TypoScript array for the WHOLE plugin!";}}s:6:"return";a:2:{i:0;s:6:"string";i:1;s:42:"HTML output with the listing of the thread";}}s:7:"content";a:2:{i:0;s:507:"		$this->conf=$conf;
+		$this->pi_setPiVarDefaults();
+		$this->pi_loadLL();
+
+			// Look up root-message / thread starter and use that UID
+		$rootUid = intval($this->getRootMessage($this->internal['currentRow']['uid']));
+		$showUserUidPid=intval($this->conf['tx_newloginbox_pi3-showUidPid']);
+		
+		$content='';
+		if ($rootUid)	{
+				// If moderation is enabled, load clipboard:
+[...]
+iew').'>
+				'.$back.'
+				'.$content.'
+				'.$back.'
+			</div>'.$this->pi_getEditPanel();
+		}			
+
+		return $content;
+	}	
+	
+	";i:1;i:1;}s:12:"content_size";i:14840;s:13:"content_lines";i:294;s:6:"atLine";i:1082;}i:25;a:7:{s:6:"header";s:51:"function moderatorFields($content,$cRow,$child=0)	{";s:11:"parentClass";s:20:"tx_maillisttofaq_pi1";s:4:"cDat";a:3:{s:4:"text";s:146:"
+This makes the form fields for moderators of a thread
+The function is called recursively from the singleView function, one time for each message
+";s:5:"param";a:3:{i:0;a:2:{i:0;s:6:"string";i:1;s:26:"The content of the message";}i:1;a:2:{i:0;s:5:"array";i:1;s:16:"The message row.";}i:2;a:2:{i:0;s:7:"boolean";i:1;s:57:"1 if the message is a child-message (has a parent record)";}}s:6:"return";a:2:{i:0;s:6:"string";i:1;s:12:"HTML content";}}s:7:"content";a:2:{i:0;s:507:"		$out='';
+		
+			// Only for thread starters:
+		if (!$child)	{
+			$out.='<br/><input type="submit" name="'.$this->prefixId.'[DATA][_moderate]" value="'.$this->pi_getLL('modview_submit').'"> '.
+					'<input type="submit" name="'.$this->prefixId.'[DATA][_moderate_return]" value="'.$this->pi_getLL('modview_submitreturn').'"> '.
+					'<input type="submit" name="'.$this->prefix
+[...]
+x;" size="10"> '.$this->pi_getLL('modview_ratingvalue','Rating value (superv. only)').'<br/>';
+			}
+		}
+
+		return $out;
+	}
+
+	";i:1;i:1;}s:12:"content_size";i:7098;s:13:"content_lines";i:100;s:6:"atLine";i:1386;}i:27;a:7:{s:6:"header";s:21:"function postForm()	{";s:11:"parentClass";s:20:"tx_maillisttofaq_pi1";s:4:"cDat";a:3:{s:4:"text";s:32:"
+Post form for archive messages
+";s:5:"param";a:0:{}s:6:"return";a:2:{i:0;s:6:"string";i:1;s:26:"HTML content for the form.";}}s:7:"content";a:2:{i:0;s:507:"		if ($GLOBALS['TSFE']->loginUser && $GLOBALS['TSFE']->fe_user->user['email'])	{
+			$url = $this->pi_linkTP_keepPIvars_url(array('reply'=>''));
+			
+			$content='<form action="'.$url.'" method="post" style="margin: 0px 0px 0px 0px;">
+				<p'.$this->pi_classParam('rpHead').'>'.$this->pi_getLL('moderatorf_onlinePost','').'</p>
+				<p>'.$this->pi_getLL('moderatorf_from','').' 
+[...]
+m>';
+
+			$content='<div'.$this->pi_classParam('postForm').'>
+					'.$content.'
+				</div>';
+			
+			return $content;
+		}
+	}
+
+	";i:1;i:1;}s:12:"content_size";i:2227;s:13:"content_lines";i:31;s:6:"atLine";i:1492;}i:29;a:7:{s:6:"header";s:49:"function replyForm($replyUid,$ccEmails=array())	{";s:11:"parentClass";s:20:"tx_maillisttofaq_pi1";s:4:"cDat";a:3:{s:4:"text";s:33:"
+Reply form for archive messages
+";s:5:"param";a:2:{i:0;a:2:{i:0;s:7:"integer";i:1;s:53:"Uid of the messag to which a response should be sent.";}i:1;a:2:{i:0;s:6:"[type]";i:1;s:14:"$ccEmails: ...";}}s:6:"return";a:2:{i:0;s:6:"string";i:1;s:26:"HTML contnet for the form.";}}s:7:"content";a:2:{i:0;s:507:"		if ($GLOBALS['TSFE']->loginUser && $GLOBALS['TSFE']->fe_user->user['email'])	{
+			$url = $this->pi_linkTP_keepPIvars_url(array('reply'=>''));
+			
+			$replyTo = $this->pi_getRecord('tx_maillisttofaq_ml',$replyUid);			
+			if (is_array($replyTo))	{
+				$subject='Re: '.$replyTo['subject'];
+				$expStr=$this->subjectPrefix;
+				
+					// Get reply text:
+				$indentedMsg = $thi
+[...]
+	$content='<div'.$this->pi_classParam('replyForm').'>
+						'.$content.'
+					</div>';
+			}
+			
+			return $content;
+		}
+	}
+
+	";i:1;i:1;}s:12:"content_size";i:4209;s:13:"content_lines";i:62;s:6:"atLine";i:1531;}i:31;a:7:{s:6:"header";s:49:"function printSingleFaqItems($record,$single=0)	{";s:11:"parentClass";s:20:"tx_maillisttofaq_pi1";s:4:"cDat";a:3:{s:4:"text";s:48:"
+Prints a single FAQ item with link to editing.
+";s:5:"param";a:2:{i:0;a:2:{i:0;s:5:"array";i:1;s:19:"The FAQ item record";}i:1;a:2:{i:0;s:7:"boolean";i:1;s:102:"If set it allows the form to place a link back to the original thread from which is sprung originally.";}}s:6:"return";a:2:{i:0;s:6:"string";i:1;s:21:"HTML output returned.";}}s:7:"content";a:2:{i:0;s:507:"		$content='';
+		$content.='<p'.$this->pi_classParam('faqsbj').'>'.htmlspecialchars($record['subject']).'</p>';
+
+		$content.='<p'.$this->pi_classParam('faqq').'><span'.$this->pi_classParam('faqqhead').'>'.($record['howto']?$this->pi_getLL('printsingl_scenario',''):$this->pi_getLL('printsingl_question','')).'</span><br/> '.nl2br($this->processContent(htmlspecialchars(trim($
+[...]
+rd['thread'])).'</p>';
+		}
+
+		$content='<div'.$this->pi_classParam('faqitem').'>'.$content.'</div>';
+		return $content;
+	}
+
+	";i:1;i:1;}s:12:"content_size";i:2147;s:13:"content_lines";i:23;s:6:"atLine";i:1601;}i:33;a:7:{s:6:"header";s:39:"function renderFAQForm($faqC,$faqUid)	{";s:11:"parentClass";s:20:"tx_maillisttofaq_pi1";s:4:"cDat";a:3:{s:4:"text";s:46:"
+This makes the form for entry of a FAQ item.
+";s:5:"param";a:2:{i:0;a:2:{i:0;s:5:"array";i:1;s:25:"The FAQ/HOWTO item record";}i:1;a:2:{i:0;s:7:"integer";i:1;s:32:"The uid field of the item record";}}s:6:"return";a:2:{i:0;s:6:"string";i:1;s:43:"HTML content for the FAQ/HOWTO editing form";}}s:7:"content";a:2:{i:0;s:507:"		$content='';
+		
+			// Subject:
+		$content.='<br/>';
+
+		$content.='<p><strong>'.$this->pi_getLL('renderfaqf_type','').'</strong></p>';
+		$content.='<p>'.$this->pi_getLL('renderfaqf_selectFaqOrHowto','').'</p>';
+		$opt=array();
+		$opt[]='<option value="0"'.($faqC['howto']==0?' SELECTED':'').'>'.htmlspecialchars($this->pi_getLL('renderfaqf_faq','')).'</option>';
+		$opt[]='<
+[...]
+****
+	 *
+	 * Functions assisting the major display functions (above)
+	 *
+	 **********************************************/
+
+	";i:1;i:1;}s:12:"content_size";i:4763;s:13:"content_lines";i:89;s:6:"atLine";i:1632;}i:35;a:8:{s:6:"header";s:26:"function moderatorList()	{";s:11:"parentClass";s:20:"tx_maillisttofaq_pi1";s:11:"sectionText";a:1:{i:0;s:55:"Functions assisting the major display functions (above)";}s:4:"cDat";a:3:{s:4:"text";s:307:"
+Creates the HTML-output for the list of managers and supervisors as shown under the thread archive form.
+Will select managers and supervisors from the tt_content fields 'tx_maillisttofaq_moderators' and 'tx_maillisttofaq_supervisors' (and thus requires the plugin to be fired up from a tt_content element)
+";s:5:"param";a:0:{}s:6:"return";a:2:{i:0;s:6:"string";i:1;s:11:"HTML-output";}}s:7:"content";a:2:{i:0;s:507:"		$output='';
+		$showUserUidPid=intval($this->conf['tx_newloginbox_pi3-showUidPid']);
+
+			# Moderators:
+		$moderators=t3lib_div::intExplode(',',$this->cObj->data['tx_maillisttofaq_moderators'].','.$this->cObj->data['tx_maillisttofaq_supervisors']);
+		$this->mList=array();
+		reset($moderators);
+		while(list(,$uid)=each($moderators))	{
+			$m=$this->getUserNameLink($uid,$show
+[...]
+$this->pi_getLL('supervisors','Supervisors:').'</strong> '.implode(', ',$this->sList).'</p>';
+		}
+		
+		return $output;
+	}
+	
+	";i:1;i:1;}s:12:"content_size";i:1084;s:13:"content_lines";i:33;s:6:"atLine";i:1728;}i:37;a:7:{s:6:"header";s:42:"function canModifyThread($threadModUser)	{";s:11:"parentClass";s:20:"tx_maillisttofaq_pi1";s:4:"cDat";a:3:{s:4:"text";s:98:"
+Returns true if the current user is allowed as manager OR supervisor to manage a certain thread.
+";s:5:"param";a:1:{i:0;a:2:{i:0;s:7:"integer";i:1;s:98:"UID of the fe_user which are CURRENTLY managing the thread (zero if no manager has been assigned).";}}s:6:"return";a:2:{i:0;s:7:"boolean";i:1;s:24:"True if management is OK";}}s:7:"content";a:2:{i:0;s:272:"		if ($GLOBALS['TSFE']->loginUser && 
+				isset($this->mList[$GLOBALS['TSFE']->fe_user->user['uid']]) && 
+				(!$threadModUser || $threadModUser==$GLOBALS['TSFE']->fe_user->user['uid'] || $this->sList[$GLOBALS['TSFE']->fe_user->user['uid']]))	{
+					return 1;		
+		}
+	}
+	
+	";i:1;i:0;}s:12:"content_size";i:272;s:13:"content_lines";i:7;s:6:"atLine";i:1768;}i:39;a:7:{s:6:"header";s:36:"function getFaqItemCount($rootUid)	{";s:11:"parentClass";s:20:"tx_maillisttofaq_pi1";s:4:"cDat";a:3:{s:4:"text";s:72:"
+Returns the number of faq items for a _ml root record (thread starter)
+";s:5:"param";a:1:{i:0;a:2:{i:0;s:7:"integer";i:1;s:58:"The UID of the thread-starting message from the _ml table.";}}s:6:"return";a:2:{i:0;s:7:"integer";i:1;s:78:"The number of FAQ items written for this particular thread (found in this PID)";}}s:7:"content";a:2:{i:0;s:302:"		// Printing FAQ items:
+		$query = 'SELECT count(*) FROM tx_maillisttofaq_faq WHERE pid='.$this->thisPID.
+					' AND thread='.intval($rootUid).
+					$this->cObj->enableFields('tx_maillisttofaq_faq');
+		$res_faq=mysql(TYPO3_db,$query);
+		list($count) = mysql_fetch_row($res_faq);
+		return $count;
+	}
+
+	";i:1;i:0;}s:12:"content_size";i:302;s:13:"content_lines";i:9;s:6:"atLine";i:1782;}i:41;a:7:{s:6:"header";s:31:"function processContent($str)	{";s:11:"parentClass";s:20:"tx_maillisttofaq_pi1";s:4:"cDat";a:3:{s:4:"text";s:98:"
+Processes the mail list content with http:// and email address and search words made into links.
+";s:5:"param";a:1:{i:0;a:2:{i:0;s:6:"string";i:1;s:60:"The input string to process for http:// and email addresses.";}}s:6:"return";a:2:{i:0;s:6:"string";i:1;s:20:"The processed string";}}s:7:"content";a:2:{i:0;s:357:"		$conf=array();
+		$conf['keep']='scheme,path,query';
+		$str = $this->cObj->http_makelinks($str,$conf);
+		
+		$str = str_replace('@','(at)',$str);
+#		$str = str_replace('@','&#'.ord('@').';',$str);
+
+		$srArr = $this->searchWordReplaceArray();
+		if (count($srArr))	{
+			$str = str_replace($srArr['search'],$srArr['replace'],$str);
+		}
+		
+		return $str;
+	}
+	
+	";i:1;i:0;}s:12:"content_size";i:357;s:13:"content_lines";i:15;s:6:"atLine";i:1798;}i:43;a:7:{s:6:"header";s:35:"function searchWordReplaceArray()	{";s:11:"parentClass";s:20:"tx_maillisttofaq_pi1";s:4:"cDat";a:3:{s:4:"text";s:84:"
+Generates a Search-word replace array based on search words found in piVars[sword]
+";s:5:"param";a:0:{}s:6:"return";a:2:{i:0;s:5:"array";i:1;s:55:"Array of search words if any are found in piVars[sword]";}}s:7:"content";a:2:{i:0;s:310:"		$srArr=array();
+		if ($this->piVars['sword'])	{
+			$kw=split('[ ,]',$this->piVars['sword']);
+
+			while(list(,$val)=each($kw))	{
+				$val=trim($val);
+				if (strlen($val)>=2)	{
+					$srArr['search']=$val;
+					$srArr['replace']='<span style="color:red;">'.$val.'</span>';
+				}
+			}
+		}
+		return $srArr;
+	}
+
+	";i:1;i:0;}s:12:"content_size";i:310;s:13:"content_lines";i:15;s:6:"atLine";i:1819;}i:45;a:7:{s:6:"header";s:27:"function setStar($rating)	{";s:11:"parentClass";s:20:"tx_maillisttofaq_pi1";s:4:"cDat";a:3:{s:4:"text";s:39:"
+Set rating-star based on input value.
+";s:5:"param";a:1:{i:0;a:2:{i:0;s:7:"integer";i:1;s:112:"The rating value. If larger than zero a star-icon is returned and the image text will indicate the rating level.";}}s:6:"return";a:2:{i:0;s:6:"string";i:1;s:58:"The HTML for the star-icon. If no start, then blank value.";}}s:7:"content";a:2:{i:0;s:225:"		if ($rating>0)	{
+			return '<img src="'.t3lib_extMgm::siteRelPath('maillisttofaq').'res/star.gif" width="14" height="12" hspace=3 border="0" alt="'.$rating.' votes" title="'.$rating.' votes" align="absmiddle" />';
+		}
+	}
+
+	";i:1;i:0;}s:12:"content_size";i:225;s:13:"content_lines";i:5;s:6:"atLine";i:1841;}i:47;a:7:{s:6:"header";s:47:"function pi_list_modeSelector($items=array())	{";s:11:"parentClass";s:20:"tx_maillisttofaq_pi1";s:4:"cDat";a:3:{s:4:"text";s:120:"
+Returns a list mode selector, clickmenu in a table.
+This function is overriding a function in the parent class, pibase
+";s:5:"param";a:1:{i:0;a:2:{i:0;s:5:"array";i:1;s:43:"The elements to put into the mode selector.";}}s:6:"return";a:2:{i:0;s:6:"string";i:1;s:35:"HTML content for the mode selector.";}}s:7:"content";a:2:{i:0;s:467:"			// Making menu table:
+		$cells=array();
+		reset($items);
+		while(list($k,$v)=each($items))	{
+			$cells[]='<td'.($this->piVars['mode']==$k?$this->pi_classParam('modeSelector-SCell'):'').'><p>'.
+				$this->pi_linkTP($v,array($this->prefixId=>array('mode'=>$k,'expThr'=>$this->piVars['expThr']))).
+				'</p></td>';
+		}
+		
+		$sTables = '<div'.$this->pi_classParam('modeSelector').'><table>
+			<tr>'.implode('',$cells).'</tr>
+		</table></div>';
+		return $sTables;
+	}
+
+	";i:1;i:0;}s:12:"content_size";i:467;s:13:"content_lines";i:15;s:6:"atLine";i:1854;}i:49;a:7:{s:6:"header";s:68:"function pi_list_browseresults($showResultCount=1,$tableParams="")	{";s:11:"parentClass";s:20:"tx_maillisttofaq_pi1";s:4:"cDat";a:3:{s:4:"text";s:46:"
+Returns a results browser (copy from PIbase)
+";s:5:"param";a:2:{i:0;a:2:{i:0;s:7:"boolean";i:1;s:58:"$showResultCount: Whether or not to display result counter";}i:1;a:2:{i:0;s:6:"string";i:1;s:42:"$tableParams: attributes for the table-tag";}}s:6:"return";a:2:{i:0;s:6:"string";i:1;s:12:"HTML content";}}s:7:"content";a:2:{i:0;s:507:"			
+			// Initializing variables:
+		$pointer=$this->piVars["pointer"];
+		$count=$this->internal["res_count"];
+		$results_at_a_time = t3lib_div::intInRange($this->internal["results_at_a_time"],1,1000);
+		$maxPages = t3lib_div::intInRange($this->internal["maxPages"],1,100);
+		$max = t3lib_div::intInRange(ceil($count/$results_at_a_time),1,$maxPages);
+		$pointer=intval($pointe
+[...]
+:''
+			).
+		'<'.trim('table '.$tableParams).'>
+			<tr>'.implode("",$links).'</tr>
+		</table></DIV>';
+		return $sTables;
+	}
+
+	";i:1;i:1;}s:12:"content_size";i:2260;s:13:"content_lines";i:50;s:6:"atLine";i:1877;}i:51;a:7:{s:6:"header";s:28:"function expThreadsCheck()	{";s:11:"parentClass";s:20:"tx_maillisttofaq_pi1";s:4:"cDat";a:3:{s:4:"text";s:150:"
+Makes checkbox for expanded threads. This has an onclick handler which will reload the page with the piVars[expThr] inversed from its current state.
+";s:5:"param";a:0:{}s:6:"return";a:2:{i:0;s:6:"string";i:1;s:29:"HTML content for the checkbox";}}s:7:"content";a:2:{i:0;s:535:"		$url = $this->pi_linkTP_keepPIvars_url(array('expThr'=>$this->piVars['expThr']?'':1));
+		
+		$content = '<form action="'.t3lib_div::getIndpEnv('REQUEST_URI').'" method="post" style="margin: 0px 0px 0px 0px;">
+		<input type="checkbox" name="_" value="" onClick="document.location=unescape(\''.rawurlencode($url).'\');"'.($this->piVars['expThr']?' CHECKED':'').'> '.$this->pi_getLL('getfieldco_expandedThreadsView','').'
+		</form>';
+		$sTables = '<div'.$this->pi_classParam('expThrCheck').'>'.$content.'</div>';
+		return $sTables;
+	}
+
+	";i:1;i:0;}s:12:"content_size";i:535;s:13:"content_lines";i:9;s:6:"atLine";i:1933;}i:53;a:7:{s:6:"header";s:31:"function getFieldContent($fN)	{";s:11:"parentClass";s:20:"tx_maillisttofaq_pi1";s:4:"cDat";a:3:{s:4:"text";s:35:"
+Returns content for a given field
+";s:5:"param";a:1:{i:0;a:2:{i:0;s:6:"string";i:1;s:96:"Fieldname from $this->internal["currentRow"] for which to get the value. The value is formatted.";}}s:6:"return";a:2:{i:0;s:6:"string";i:1;s:20:"The formatted value.";}}s:7:"content";a:2:{i:0;s:507:"		switch($fN) {
+			case 'subject':
+			case 'moderated_subject':
+				return $this->pi_list_linkSingle(htmlspecialchars($this->removeSubjectPrefix($this->internal['currentRow']['moderated_subject']?$this->internal['currentRow']['moderated_subject']:$this->internal['currentRow'][$fN])),$this->internal['currentRow']['uid'],0);
+			break;
+			case 'mail_date':
+				if ($this->inte
+[...]
+'sender_email']);
+			break;
+			default:
+				return htmlspecialchars($this->internal['currentRow'][$fN]);
+			break;
+		}
+	}
+	
+	";i:1;i:1;}s:12:"content_size";i:1529;s:13:"content_lines";i:35;s:6:"atLine";i:1949;}i:55;a:7:{s:6:"header";s:36:"function removeSubjectPrefix($str)	{";s:11:"parentClass";s:20:"tx_maillisttofaq_pi1";s:4:"cDat";a:3:{s:4:"text";s:114:"
+Returns the input string but where the first occurance of $this->subjectPrefix (eg. "[Typo3]") has been removed.
+";s:5:"param";a:1:{i:0;a:2:{i:0;s:6:"string";i:1;s:22:"Input string (subject)";}}s:6:"return";a:2:{i:0;s:6:"string";i:1;s:6:"Output";}}s:7:"content";a:2:{i:0;s:121:"		if ($this->subjectPrefix)	{
+			$str = trim(implode('',explode($this->subjectPrefix,$str,2)));
+		}
+		return $str;
+	}
+	
+	";i:1;i:0;}s:12:"content_size";i:121;s:13:"content_lines";i:6;s:6:"atLine";i:1991;}i:57;a:7:{s:6:"header";s:30:"function getFieldHeader($fN)	{";s:11:"parentClass";s:20:"tx_maillisttofaq_pi1";s:4:"cDat";a:3:{s:4:"text";s:34:"
+Returns header value for a field
+";s:5:"param";a:1:{i:0;a:2:{i:0;s:6:"string";i:1;s:10:"Field name";}}s:6:"return";a:2:{i:0;s:6:"string";i:1;s:65:"The label for the field header, probably found in locallang file.";}}s:7:"content";a:2:{i:0;s:112:"		switch($fN) {
+			default:
+				return $this->pi_getLL('listFieldHeader_'.$fN,'['.$fN.']');
+			break;
+		}
+	}
+	
+	";i:1;i:0;}s:12:"content_size";i:112;s:13:"content_lines";i:7;s:6:"atLine";i:2004;}i:59;a:7:{s:6:"header";s:49:"function getFieldHeader_sortLink($fN,$label='')	{";s:11:"parentClass";s:20:"tx_maillisttofaq_pi1";s:4:"cDat";a:3:{s:4:"text";s:51:"
+Returns the header value with sorting-link put on
+";s:5:"param";a:2:{i:0;a:2:{i:0;s:6:"string";i:1;s:10:"Field name";}i:1;a:2:{i:0;s:6:"string";i:1;s:87:"Alternative label, overriding the one that would otherwise come from ->getFieldHeader()";}}s:6:"return";a:2:{i:0;s:6:"string";i:1;s:65:"The label for the field header, probably found in locallang file.";}}s:7:"content";a:2:{i:0;s:507:"		$sortStr = $fN.':';
+			// If sortField is the same as previously:
+		if (!strcmp($fN,$this->internal['orderBy']))	{
+			$sortStr.= $this->internal['descFlag']?0:1;
+		} else {	// Otherwise set default order depending on fieldtype:
+			$sortStr.= t3lib_div::inList('all_replies,all_latest,view_stat,crdate,mail_date',$fN)?1:0;
+		}
+		
+		return $this->pi_linkTP_keepPIvars($label?
+[...]
+*********************************
+	 *
+	 * Data processing functions
+	 *
+	 ***********************************************/
+
+	";i:1;i:1;}s:12:"content_size";i:607;s:13:"content_lines";i:31;s:6:"atLine";i:2019;}i:61;a:8:{s:6:"header";s:46:"function processingOfInData($pid,$rootUid=0)	{";s:11:"parentClass";s:20:"tx_maillisttofaq_pi1";s:11:"sectionText";a:1:{i:0;s:25:"Data processing functions";}s:4:"cDat";a:3:{s:4:"text";s:154:"
+This function processes the submitted data in all kinds of situations: Management of threads, sending replys, marking an answered as "Saved my day" etc.
+";s:5:"param";a:2:{i:0;a:2:{i:0;s:7:"integer";i:1;s:60:"For FAQ/HOWTO items: The PID where to create the FAQ record.";}i:1;a:2:{i:0;s:7:"integer";i:1;s:92:"For FAQ/HOWTO items: The reference uid to the mailing list thread from which it was created.";}}s:6:"return";a:2:{i:0;s:5:"mixed";i:1;s:31:"-1 = OK, otherwise error string";}}s:7:"content";a:2:{i:0;s:507:"		if (is_array($this->piVars['DATA']))	{
+			if ($GLOBALS['TSFE']->loginUser)	{
+					// Saved my day...
+				if ($this->piVars['DATA']['answerSavedDay'])	{
+					$savedDayUid=$this->piVars['DATA']['answerSavedDay'];
+					if (t3lib_div::testInt($savedDayUid))	{
+						$savedDayRec=$this->pi_getRecord('tx_maillisttofaq_ml',$savedDayUid);
+						if (is_array($savedDayRec))	{
+					
+[...]
+)	{
+					return $this->sendReplyMail($this->piVars['DATA']['reply']);
+				}
+			} else return 'ERROR: No fe-user.';
+		}
+	}
+	
+	";i:1;i:1;}s:12:"content_size";i:8700;s:13:"content_lines";i:201;s:6:"atLine";i:2058;}i:63;a:7:{s:6:"header";s:50:"function sendReplyMail($replyArray,$altEmail='')	{";s:11:"parentClass";s:20:"tx_maillisttofaq_pi1";s:4:"cDat";a:3:{s:4:"text";s:37:"
+Sending a mail / reply to the list.
+";s:5:"param";a:2:{i:0;a:2:{i:0;s:5:"array";i:1;s:27:"Array with the data to send";}i:1;a:2:{i:0;s:6:"[type]";i:1;s:14:"$altEmail: ...";}}s:6:"return";a:2:{i:0;s:6:"string";i:1;s:43:"Error message if applicable. Otherwise void";}}s:7:"content";a:2:{i:0;s:507:"		if (trim($replyArray['subject']))	{
+			$enc='quoted-printable';
+			$charset='ISO-8859-1';
+			$headersArr=array();
+			$sender = trim($replyArray['name'].' <'.trim($replyArray['email']).'>');
+			$headersArr[]='From: '.$sender;
+			$headersArr[]='Return-Path: <'.trim($replyArray['email']).'>';
+			if (trim($replyArray['message_id']))	{
+				$headersArr[]='In-Reply-To: '.trim($
+[...]
+recip);
+#					debug($this->piVars['DATA']);
+		} else return 'ERROR: You did not specify a subject! No mail was sent.';
+	}
+	
+	";i:1;i:1;}s:12:"content_size";i:1862;s:13:"content_lines";i:47;s:6:"atLine";i:2267;}i:65;a:7:{s:6:"header";s:33:"function updateThread($itemUid)	{";s:11:"parentClass";s:20:"tx_maillisttofaq_pi1";s:4:"cDat";a:3:{s:4:"text";s:242:"
+This takes a uid of a _ml record and will update the whole thread with new "cached" information (like last-entry, number of items etc).
+Call this function when a new record has been inserted into the thread or if something else has changed.
+";s:5:"param";a:1:{i:0;a:2:{i:0;s:7:"integer";i:1;s:31:"UID of any element in a thread.";}}s:6:"return";a:2:{i:0;s:4:"void";i:1;s:0:"";}}s:7:"content";a:2:{i:0;s:507:"		// Get root item:
+		$rootItem = intval($this->getRootMessage($itemUid));
+		if ($rootItem)	{
+			$rootRecord = $this->pi_getRecord('tx_maillisttofaq_ml',$rootItem);
+			
+				// Getting children:
+			$result=array();
+			$children = $this->getChildren($rootItem,$result,'uid,mail_date,subject,sender_name,sender_email,ot_flag,rating,moderator_fe_user,fe_user',1,0);
+			
+				// Go
+[...]
+_mlcontent SET all_content='' WHERE ml_uid IN (".implode(',',$uidList).")";
+				$res2=mysql(TYPO3_db,$query);
+			}
+		}
+	}
+	
+	";i:1;i:1;}s:12:"content_size";i:2620;s:13:"content_lines";i:74;s:6:"atLine";i:2322;}i:67;a:7:{s:6:"header";s:51:"function updateViewStat($type,$uid,$currentCount)	{";s:11:"parentClass";s:20:"tx_maillisttofaq_pi1";s:4:"cDat";a:3:{s:4:"text";s:52:"
+Updates the view-stat field of _ml or _faq records
+";s:5:"param";a:3:{i:0;a:2:{i:0;s:6:"string";i:1;s:70:"$type: If "faq" then the faq-table is updated. Default is "_ml" table.";}i:1;a:2:{i:0;s:7:"integer";i:1;s:65:"$uid: The UID of the element for which to increase the view-count";}i:2;a:2:{i:0;s:7:"integer";i:1;s:106:"$currentCount: The current view-stat value. This is re-written to the record after being increased by one.";}}s:6:"return";a:2:{i:0;s:4:"void";i:1;s:0:"";}}s:7:"content";a:2:{i:0;s:490:"		$didReg = $GLOBALS['TSFE']->fe_user->getKey('ses','tx_maillisttofaq_view_stat');
+		if (!isset($didReg[$type.$uid]))	{
+				// ..
+			$didReg[$type.$uid]=1;
+			$GLOBALS['TSFE']->fe_user->setKey('ses','tx_maillisttofaq_view_stat',$didReg);
+				// Update:
+			$query = 'UPDATE '.
+					($type=='faq'?'tx_maillisttofaq_faq':'tx_maillisttofaq_ml').
+					' SET view_stat='.intval($currentCount+1).
+					' WHERE uid='.intval($uid);
+			$res = mysql(TYPO3_db,$query);
+#debug(array($query));
+		}
+	}
+	
+	";i:1;i:0;}s:12:"content_size";i:490;s:13:"content_lines";i:15;s:6:"atLine";i:2405;}i:69;a:7:{s:6:"header";s:24:"function getSticking()	{";s:11:"parentClass";s:20:"tx_maillisttofaq_pi1";s:4:"cDat";a:3:{s:4:"text";s:122:"
+Get sticker-elements: Loads the internal array $this->stickingElements with "ml_uid"/"uid" pairs for the CURRENT fe_user
+";s:5:"param";a:0:{}s:6:"return";a:2:{i:0;s:4:"void";i:1;s:0:"";}}s:7:"content";a:2:{i:0;s:286:"		$this->stickingElements=array();
+		$query='SELECT * FROM tx_maillisttofaq_ml_stick WHERE fe_user='.intval($GLOBALS['TSFE']->fe_user->user['uid']);
+		$res=mysql(TYPO3_db,$query)	;
+		while($row=mysql_fetch_assoc($res))	{
+			$this->stickingElements[$row['ml_uid']]=$row['uid'];
+		}
+	}
+
+	";i:1;i:0;}s:12:"content_size";i:286;s:13:"content_lines";i:8;s:6:"atLine";i:2426;}i:71;a:7:{s:6:"header";s:27:"function manageSticking()	{";s:11:"parentClass";s:20:"tx_maillisttofaq_pi1";s:4:"cDat";a:3:{s:4:"text";s:168:"
+Manage sticker-elements for the current logged in user. Expect a form to be sent with the [DATA][stick] input being an array with thread starters marked for sticking.
+";s:5:"param";a:0:{}s:6:"return";a:2:{i:0;s:4:"void";i:1;s:0:"";}}s:7:"content";a:2:{i:0;s:507:"		if (is_array($this->piVars['DATA']) && $this->piVars['DATA']['stick'] && $GLOBALS['TSFE']->loginUser)	{
+			$stickParts = t3lib_div::intExplode(':',$this->piVars['DATA']['stick']);
+
+				// Just delete any item:
+			$query='DELETE FROM tx_maillisttofaq_ml_stick WHERE fe_user='.intval($GLOBALS['TSFE']->fe_user->user['uid']).
+						' AND ml_uid='.intval($stickParts['0']);
+			
+[...]
+al($GLOBALS['TSFE']->fe_user->user['uid']).','.intval($stickParts['0']).')';
+				$res=mysql(TYPO3_db,$query)	;
+			}
+		}
+	}
+
+	";i:1;i:1;}s:12:"content_size";i:691;s:13:"content_lines";i:15;s:6:"atLine";i:2440;}i:73;a:7:{s:6:"header";s:29:"function getFAQCategories()	{";s:11:"parentClass";s:20:"tx_maillisttofaq_pi1";s:4:"cDat";a:3:{s:4:"text";s:82:"
+Get categories from storage folder loaded into internal array, $this->categories
+";s:5:"param";a:0:{}s:6:"return";a:2:{i:0;s:4:"void";i:1;s:0:"";}}s:7:"content";a:2:{i:0;s:410:"		$d=$GLOBALS['TSFE']->getStorageSiterootPids();
+		$storagePID = intval($d['_STORAGE_PID']);		
+		
+		$query = 'SELECT * FROM tx_maillisttofaq_faqcat WHERE pid='.$storagePID.
+				$this->cObj->enableFields('tx_maillisttofaq_faqcat').
+				' ORDER BY title';
+
+		$this->categories=array();
+		
+		$res = mysql(TYPO3_db,$query);
+		while($row=mysql_fetch_assoc($res))	{
+			$this->categories[$row['uid']]=$row;
+		}
+	}
+	
+	";i:1;i:0;}s:12:"content_size";i:410;s:13:"content_lines";i:15;s:6:"atLine";i:2461;}i:75;a:7:{s:6:"header";s:27:"function getOnlineUsers()	{";s:11:"parentClass";s:20:"tx_maillisttofaq_pi1";s:4:"cDat";a:3:{s:4:"text";s:265:"
+Select online users from storage folder and into internal array, $this->onlineUsers, where key is 'uid' and value is the users name (looked up by $this->getUsersNameLink)
+Online users are users with their 'is_online' value set within the last 10 minutes (default)
+";s:5:"param";a:0:{}s:6:"return";a:2:{i:0;s:4:"void";i:1;s:0:"";}}s:7:"content";a:2:{i:0;s:507:"		$d=$GLOBALS['TSFE']->getStorageSiterootPids();
+		$storagePID = intval($d['_STORAGE_PID']);		
+		
+		$showUserUidPid=intval($this->conf['tx_newloginbox_pi3-showUidPid']);
+		
+		$query = 'SELECT uid,username FROM fe_users WHERE is_online>'.(time()-60*10).
+				$this->cObj->enableFields('fe_users').
+				' ORDER BY is_online DESC';
+
+		$this->onlineUsers=array();
+		$res = mysql(T
+[...]
+	$m=$this->getUserNameLink($row['uid'],$showUserUidPid);
+			if ($m)	{
+				$this->onlineUsers[$row['uid']]=$m;
+			}
+		}
+	}
+	
+	";i:1;i:1;}s:12:"content_size";i:613;s:13:"content_lines";i:20;s:6:"atLine";i:2483;}i:77;a:7:{s:6:"header";s:52:"function getRootMessage($parent_uid,$maxLevels=50)	{";s:11:"parentClass";s:20:"tx_maillisttofaq_pi1";s:4:"cDat";a:3:{s:4:"text";s:192:"
+This will go back in the "root-line" of any message in the _ml table and return the id-list of elements found in the rootline.
+Use "intval()" on the output to get the uid of the root-record!
+";s:5:"param";a:2:{i:0;a:2:{i:0;s:7:"integer";i:1;s:47:"UID from _ml table to get parent root line for.";}i:1;a:2:{i:0;s:7:"integer";i:1;s:61:"Max levels - a security for not ending in endless recursivity";}}s:6:"return";a:2:{i:0;s:6:"string";i:1;s:18:"Comma list of UIDs";}}s:7:"content";a:2:{i:0;s:347:"		if ($maxLevels<=0)	return '';
+		
+		$query='SELECT parent FROM tx_maillisttofaq_ml WHERE uid='.intval($parent_uid);
+		$res2=mysql(TYPO3_db,$query);
+		if ($row2=mysql_fetch_assoc($res2))	{
+			if ($row2['parent']>0)	{
+				return $this->getRootMessage($row2['parent'],$maxLevels-1).','.$parent_uid;
+			} else {
+				return $parent_uid;
+			}
+		}
+	}
+
+	";i:1;i:0;}s:12:"content_size";i:347;s:13:"content_lines";i:13;s:6:"atLine";i:2512;}i:79;a:7:{s:6:"header";s:90:"function getChildren($parent_uid,&$result,$fields='uid',$level=1,$enFields=1,$otCheck=0)	{";s:11:"parentClass";s:20:"tx_maillisttofaq_pi1";s:4:"cDat";a:3:{s:4:"text";s:247:"
+This gets the child records for a record in the _ml table.
+The return value is a table with the structure hierarchically arranged.
+The pass-by-reference array $result will have the same records but in a plain list.
+Designed for recursive calling
+";s:5:"param";a:6:{i:0;a:2:{i:0;s:7:"integer";i:1;s:42:"The parent record UID to get children for.";}i:1;a:2:{i:0;s:5:"array";i:1;s:20:"Flat list of records";}i:2;a:2:{i:0;s:6:"string";i:1;s:53:"List of fields to select and include in return value.";}i:3;a:2:{i:0;s:7:"integer";i:1;s:60:"Level indicator. Will be counted up for each recursive call.";}i:4;a:2:{i:0;s:5:"mixed";i:1;s:29:"I have NO idea - is not used!";}i:5;a:2:{i:0;s:7:"boolean";i:1;s:70:"If set, then only records with the "ot_flag" not set will be selected.";}}s:6:"return";a:2:{i:0;s:5:"array";i:1;s:36:"Rows selected in an array-structure.";}}s:7:"content";a:2:{i:0;s:507:"		if (intval($parent_uid)<=0)	return;
+		
+		$rows=array();
+		$query='SELECT '.$fields.' FROM tx_maillisttofaq_ml WHERE parent='.intval($parent_uid).
+			' AND pid="'.$this->thisPID.'"'.
+			($otCheck ? ' AND ot_flag=0' : '').
+			$this->cObj->enableFields('tx_maillisttofaq_ml');
+		$res2=mysql(TYPO3_db,$query);
+		while ($row2=mysql_fetch_assoc($res2))	{
+			$result[$row2['uid']]
+[...]
+,$result,$fields,$level+1,$enFields,$otCheck);
+			if (count($sub))	$rows[$row2['uid']]['SUB']=$sub;
+		}
+		return $rows;
+	}
+
+	";i:1;i:1;}s:12:"content_size";i:624;s:13:"content_lines";i:19;s:6:"atLine";i:2540;}i:81;a:7:{s:6:"header";s:36:"function getContentForMLitem($uid)	{";s:11:"parentClass";s:20:"tx_maillisttofaq_pi1";s:4:"cDat";a:3:{s:4:"text";s:31:"
+Get content for a _ml element
+";s:5:"param";a:1:{i:0;a:2:{i:0;s:7:"integer";i:1;s:38:"UID of the ml-item to get content for.";}}s:6:"return";a:2:{i:0;s:6:"string";i:1;s:40:"Content for the item given by parameter.";}}s:7:"content";a:2:{i:0;s:183:"		$query='SELECT content FROM tx_maillisttofaq_mlcontent WHERE ml_uid='.intval($uid);
+		$res = mysql(TYPO3_db,$query);
+		$row=mysql_fetch_assoc($res);
+		return $row['content'];
+	}
+	
+	";i:1;i:0;}s:12:"content_size";i:183;s:13:"content_lines";i:6;s:6:"atLine";i:2566;}i:83;a:7:{s:6:"header";s:70:"function getUserNameLink($fe_users_uid,$showUserUidPid=0,$prefix='')	{";s:11:"parentClass";s:20:"tx_maillisttofaq_pi1";s:4:"cDat";a:3:{s:4:"text";s:41:"
+Returns the user name of a fe_users.uid
+";s:5:"param";a:3:{i:0;a:2:{i:0;s:7:"integer";i:1;s:40:"UID of the fe_user to find the name for.";}i:1;a:2:{i:0;s:7:"integer";i:1;s:56:"PID of the page where details for this user is displayed";}i:2;a:2:{i:0;s:6:"string";i:1;s:76:"Any string before the username. Is used here to put an icon before the name.";}}s:6:"return";a:2:{i:0;s:6:"string";i:1;s:71:"A HTML-string with the username linked, and prefixed, ready for output.";}}s:7:"content";a:2:{i:0;s:507:"		if ($fe_users_uid)	{
+			if (!isset($this->cache_fe_user_names[$fe_users_uid]))	{
+				$R_URI = t3lib_div::getIndpEnv('REQUEST_URI');
+				
+				$fe_user_rec = $this->pi_getRecord('fe_users', $fe_users_uid);
+				$this->cache_fe_user_names[$fe_users_uid] = $prefix.($showUserUidPid ? $this->pi_linkToPage($fe_user_rec['username'],$showUserUidPid,'',array('tx_newloginbox_pi3[sho
+[...]
+**********************************
+	 *
+	 * MAIL transfer functions:
+	 *
+	 ***********************************************/
+
+	";i:1;i:1;}s:12:"content_size";i:709;s:13:"content_lines";i:31;s:6:"atLine";i:2581;}i:85;a:8:{s:6:"header";s:45:"function transferMailsFromInBox($number=10)	{";s:11:"parentClass";s:20:"tx_maillisttofaq_pi1";s:11:"sectionText";a:1:{i:0;s:24:"MAIL transfer functions:";}s:4:"cDat";a:3:{s:4:"text";s:89:"
+This will select the [$number] most recent mails from the 'inbox' - the 'inmail' table.
+";s:5:"param";a:1:{i:0;a:2:{i:0;s:7:"integer";i:1;s:36:"Number of mails to select at a time.";}}s:6:"return";a:2:{i:0;s:4:"void";i:1;s:0:"";}}s:7:"content";a:2:{i:0;s:507:"			// Make query:
+		$whereCl=$this->selectField."='".$this->selectValue."'";
+		$query = 'SELECT * FROM tx_maillisttofaq_inmail WHERE '.$whereCl.' AND NOT deleted ORDER BY uid LIMIT '.intval($number);
+
+			// Find storage PID
+		$d=$GLOBALS['TSFE']->getStorageSiterootPids();
+		$this->storagePID = intval($d['_STORAGE_PID']);		
+
+			// Selecting:
+		$res = mysql(TYPO3_db,$query);
+[...]
+which did not arrive in the right order and therefore did not correctly relate to a thread.
+		$this->collectOrphans();
+	}
+	
+	";i:1;i:1;}s:12:"content_size";i:920;s:13:"content_lines";i:27;s:6:"atLine";i:2619;}i:87;a:7:{s:6:"header";s:35:"function storeMailInMLtable($row)	{";s:11:"parentClass";s:20:"tx_maillisttofaq_pi1";s:4:"cDat";a:4:{s:4:"text";s:120:"
+This takes a record from the _inmail table and parses the content, puts it in relation to the records in the _ml table
+";s:5:"param";a:1:{i:0;a:2:{i:0;s:5:"array";i:1;s:27:"Record from "inmail" table.";}}s:6:"return";a:2:{i:0;s:4:"void";i:1;s:0:"";}s:8:"internal";i:1;}s:7:"content";a:2:{i:0;s:507:"			// Gets the total parsed mail with everything (in an array):
+		$fullDecodedMailParts=$this->mailParser->fullParse($row['mailcontent']);
+#debug($fullDecodedMailParts);
+
+			// Beginning to put trivial information in the content array:
+		$mlRow=array();
+		$mlRow_content=array();
+		$mlRow['subject']=$fullDecodedMailParts['subject'];
+		$mlRow['sender_email']=$fullDecodedMail
+[...]
+O3_db,$query);
+
+					// A call to this function will update the whole thread.
+				$this->updateThread($newId);
+			}
+		}
+	}
+
+	";i:1;i:1;}s:12:"content_size";i:4488;s:13:"content_lines";i:102;s:6:"atLine";i:2654;}i:89;a:7:{s:6:"header";s:27:"function collectOrphans()	{";s:11:"parentClass";s:20:"tx_maillisttofaq_pi1";s:4:"cDat";a:3:{s:4:"text";s:366:"
+Looking for mails which did not arrive in the right order and therefore did not correctly relate to a thread (reply=-1)
+With such mails we try to look up their relation again. If found we update the mail/thread and all is find ('reply' is then changed to 1). If no thread could be found still, we change reply to '-2' - and thus we will not bother with it anymore.
+";s:5:"param";a:0:{}s:6:"return";a:2:{i:0;s:6:"string";i:1;s:23:"The plain text content.";}}s:7:"content";a:2:{i:0;s:507:"		$query = 'SELECT * FROM tx_maillisttofaq_ml WHERE reply=-1';
+		$res = mysql(TYPO3_db,$query);
+		
+			// For each of the mails with 'reply'=-1:
+		while($row=mysql_fetch_assoc($res))	{
+			$items = array_unique(t3lib_div::trimExplode(' ',$row['references_list'],1));
+			$mlRow=array();
+			$query = '';
+
+				// Looking again for the references:
+			$reply = $this->searchForParen
+[...]
+$res2 = mysql(TYPO3_db,$query);
+				$this->updateThread($row['uid']);
+#debug($row['subject']);
+#debug($mlRow);
+			}
+		}
+	}
+
+	";i:1;i:1;}s:12:"content_size";i:1247;s:13:"content_lines";i:33;s:6:"atLine";i:2763;}i:91;a:7:{s:6:"header";s:40:"function getPlainTextContentOut($cArr)	{";s:11:"parentClass";s:20:"tx_maillisttofaq_pi1";s:4:"cDat";a:3:{s:4:"text";s:91:"
+This will try to get some plain text content out of the parsed BODY section of a message.
+";s:5:"param";a:1:{i:0;a:2:{i:0;s:5:"mixed";i:1;s:128:"Array or string with mail body content. Normally you pass the value of key ['CONTENT'] from the result of ->fullParse() function";}}s:6:"return";a:2:{i:0;s:6:"string";i:1;s:23:"The plain text content.";}}s:7:"content";a:2:{i:0;s:507:"		$output='';
+		if (is_array($cArr))	{
+			$foundPlain=0;
+			foreach ($cArr as $k => $v)	{
+				if (strtolower($v['_CONTENT_TYPE_DAT']['_MIME_TYPE'])=='text/plain')	{
+					$output=$v['CONTENT'];
+					$foundPlain=1;
+					break;
+				}
+			}
+			
+			if (!$foundPlain)	{
+				$foundHTML=0;
+				reset($cArr);
+				while(list($k,$v)=each($cArr))	{
+					if (strtolower($v['_CONTENT_TYPE_D
+[...]
+'])=='text/html')	{
+				$output = $this->htmlToPlain($cArr);
+			} else {
+				$output=$cArr;
+			}
+		}
+		return $output;
+	}
+	
+	";i:1;i:1;}s:12:"content_size";i:992;s:13:"content_lines";i:42;s:6:"atLine";i:2803;}i:93;a:7:{s:6:"header";s:27:"function htmlToPlain($in)	{";s:11:"parentClass";s:20:"tx_maillisttofaq_pi1";s:4:"cDat";a:3:{s:4:"text";s:123:"
+Converts text/html content from HTML-emails to text/plain, basically converting selected entities (eg. '&oslash;' to 'ø')
+";s:5:"param";a:1:{i:0;a:2:{i:0;s:6:"string";i:1;s:26:"Input string with entities";}}s:6:"return";a:2:{i:0;s:6:"string";i:1;s:52:"Output string with entities converted to characters.";}}s:7:"content";a:2:{i:0;s:409:"		$srcArr=array('&nbsp;','&gt;','&lt;','&amp;','&quot;','&uuml;','&ouml;','&auml','&aring;','&oslash;','&AElig;');
+		$destArr=array(' '    ,'>'   ,'<'   ,'&'    ,'"'     ,'ü'     ,'ö'     ,'ä'    ,'å'      ,'ø'       ,'æ');
+		$out = trim(str_replace($srcArr,$destArr,strip_tags($in)));
+
+#		if (ereg('&[a-zA-Z]*;',$out,$reg))	debug($reg);
+#		if (ereg('&#([0-9]*);',$out,$reg))	debug($reg);
+		return $out;
+	}
+
+	";i:1;i:0;}s:12:"content_size";i:409;s:13:"content_lines";i:9;s:6:"atLine";i:2852;}i:95;a:7:{s:6:"header";s:34:"function searchForParent($items)	{";s:11:"parentClass";s:20:"tx_maillisttofaq_pi1";s:4:"cDat";a:3:{s:4:"text";s:245:"
+This will search for the parent message-id for an array of message-ids (relations + in-reply-to fields)
+Example: $items = array_unique(t3lib_div::trimExplode(' ',$fullDecodedMailParts['in-reply-to'].' '.$fullDecodedMailParts['references'],1));
+";s:5:"param";a:1:{i:0;a:2:{i:0;s:5:"array";i:1;s:67:"Values are message ids from "references" and/or "in-reply-to" felds";}}s:6:"return";a:2:{i:0;s:7:"integer";i:1;s:204:"0: Not a reply, since no references are input (empty input array); >0: Parent found, value is the UID of that parent; -1: No parent message was found. Should probably be looked up later or by other means!";}}s:7:"content";a:2:{i:0;s:507:"		$reply=0;
+
+		reset($items);
+		while(list(,$value)=each($items))	{
+			$value = ereg_replace('[[:space:]]','',$value);	// Some references has been found to have spaces in them, eg "blablabl.d e>" - which is preceived as an error. Probably it is. Not many mails were like this.
+			
+			$reply=-1;
+			$query="SELECT uid FROM tx_maillisttofaq_ml WHERE pid='".$this->thisPID."' AN
+[...]
+**************************************
+	 *
+	 * MAIL FEED functions:
+	 *
+	 ***********************************************/
+
+	";i:1;i:1;}s:12:"content_size";i:712;s:13:"content_lines";i:35;s:6:"atLine";i:2869;}i:97;a:8:{s:6:"header";s:28:"function readMails($mconf)	{";s:11:"parentClass";s:20:"tx_maillisttofaq_pi1";s:11:"sectionText";a:1:{i:0;s:20:"MAIL FEED functions:";}s:4:"cDat";a:3:{s:4:"text";s:141:"
+Pulls mails off another server and into the inmail-table.
+The idea is that the remove inmail table is synchronized with local inmail table.
+";s:5:"param";a:1:{i:0;a:2:{i:0;s:5:"array";i:1;s:53:"TypoScript configuration for the "readmail" function.";}}s:6:"return";a:2:{i:0;s:4:"void";i:1;s:0:"";}}s:7:"content";a:2:{i:0;s:507:"			// Find the latest UID:
+		$query = 'SELECT uid FROM tx_maillisttofaq_inmail ORDER BY uid DESC LIMIT 0,1';
+		$res = mysql(TYPO3_db,$query);
+		$row = mysql_fetch_assoc($res);
+		$nextAvailableUid = ($row['uid']+1);
+
+			// Prepare URL to select from:
+		$p='';
+		$p.= '&tx_maillisttofaq_pi1[readMails]='.intval($nextAvailableUid);
+		$p.= '&tx_maillisttofaq_pi1[readMails_count]
+[...]
+"',1);
+		} else $GLOBALS["TT"]->setTSlogMessage('READMAIL ERROR: MD5 string and MD5 hash of content did not match.',3);
+	}
+
+	";i:1;i:1;}s:12:"content_size";i:2538;s:13:"content_lines";i:51;s:6:"atLine";i:2912;}i:99;a:4:{s:6:"header";s:28:"function feedMails($mconf)	{";s:11:"parentClass";s:20:"tx_maillisttofaq_pi1";s:4:"cDat";a:3:{s:4:"text";s:179:"
+Feeding mails to a remote webserver which want records from the "inmail" table
+This function will exit brutally (after echoing out the content stream), never returning anything.
+";s:5:"param";a:1:{i:0;a:2:{i:0;s:5:"array";i:1;s:53:"TypoScript configuration for the "readmail" function.";}}s:6:"return";a:2:{i:0;s:4:"void";i:1;s:0:"";}}s:6:"atLine";i:2971;}i:101;a:8:{s:6:"header";s:39:"function makeFeUserStat($fe_user_uid)	{";s:11:"parentClass";s:20:"tx_maillisttofaq_pi1";s:11:"sectionText";a:1:{i:0;s:36:"Experimental / Development functions";}s:4:"cDat";a:3:{s:4:"text";s:25:"
+Makes stat over fe_user
+";s:5:"param";a:1:{i:0;a:2:{i:0;s:6:"[type]";i:1;s:17:"$fe_user_uid: ...";}}s:6:"return";a:2:{i:0;s:6:"[type]";i:1;s:3:"...";}}s:7:"content";a:2:{i:0;s:507:"debug($fe_user_uid,1);
+
+			// Counting thread starters
+		$query="SELECT count(*) FROM tx_maillisttofaq_ml WHERE fe_user=".intval($fe_user_uid).
+				" AND reply<=0".
+				$this->cObj->enableFields("tx_maillisttofaq_ml");
+		$res=mysql(TYPO3_db,$query);
+		list($count) = mysql_fetch_row($res);
+debug("Qs:".$count,1);
+
+			// Counting answers
+		$query="SELECT count(*) FROM tx_mail
+[...]
+.php'])	{
+	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/maillisttofaq/pi1/class.tx_maillisttofaq_pi1.php']);
+}
+?>";i:1;i:1;}s:12:"content_size";i:2798;s:13:"content_lines";i:86;s:6:"atLine";i:3029;}}}}}

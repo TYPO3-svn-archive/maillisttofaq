@@ -1,0 +1,92 @@
+#! /usr/bin/php -q
+<?php
+
+
+/* 
+	ALL WE NEED IS THE SCRIPT PATH...
+
+	OK, this was a problem: See, with QMAIL the script path (eg: /www/htdocs/typo3/sites/typo3site/typo3conf/ext/t3annotation/inmail.phpsh)
+	was readily available as a HTTP_ENV_VAR[_]. But that was not the case with postfix. With postfix you get ONLY this information from _ENV
+
+    Array
+        (
+            [MAIL_CONFIG] => /etc/postfix
+            [PATH] => /usr/bin:/bin
+            [LOGNAME] => submitmail
+            [USER] => submitmail
+            [SENDER] => typo3-owner@netfielders.de
+            [RECIPIENT] => submitmail@matt.oh-my-god.dk
+            [LOCAL] => submitmail
+            [DOMAIN] => matt.oh-my-god.dk
+        )
+	
+	
+	SO therefore we include this file, which will set the current script-path manually into HTTP_ENV_VAR[_]
+
+*/
+include("../../../_dir_config_for_php_shell_script.php");
+
+/*
+ob_start();
+print_r($HTTP_ENV_VARS);
+$email = "kasper@typo3.com";
+mail (
+	$email,
+	"INMAIL",
+	ob_get_contents()
+);
+ob_end_clean();
+*/
+
+
+
+
+
+$dir = dirname($HTTP_ENV_VARS["_"]);
+define("PATH_typo3", dirname(dirname(dirname($dir)))."/typo3/");
+define("PATH_site", dirname(PATH_typo3)."/");
+define("PATH_t3lib", PATH_typo3."t3lib/");
+define("PATH_typo3conf", PATH_site."typo3conf/");	// Typo-configuraton path
+define("TYPO3_MODE","BE");
+
+
+if (substr($dir,strlen(PATH_site))!="typo3conf/ext/maillisttofaq")	{
+	die("Wrong path... This '".substr($dir,strlen(PATH_site))."' should be the last part of '".$dir."'");
+}
+require(PATH_t3lib."class.t3lib_div.php");
+require(PATH_t3lib."class.t3lib_extmgm.php");
+require(PATH_t3lib."config_default.php");		
+if (!defined ("TYPO3_db")) 	die ("The configuration file was not included.");
+
+require_once (PATH_t3lib."class.t3lib_readmail.php");
+
+// Connect to the database
+$result = @mysql_pconnect(TYPO3_db_host, TYPO3_db_username, TYPO3_db_password); 
+if (!$result)	{
+	die("Couldn't connect to database at ".TYPO3_db_host);
+}
+
+	
+
+// MAIL CONTENT
+$filename = "php://stdin";
+
+$content = t3lib_div::getUrl($filename);
+if (trim($content))	{
+	$readMail = t3lib_div::makeInstance("t3lib_readmail");
+		// Split mail into head and content
+	$mailParts = $readMail->fullParse($content);
+
+	$query="INSERT INTO tx_maillisttofaq_inmail (mailcontent,from_email,to_email,reply_to_email,sender_email,message_id,subject) VALUES (
+		'".addslashes($content)."',
+		'".addslashes($mailParts["_FROM"]["email"])."',
+		'".addslashes($mailParts["_TO"]["email"])."',
+		'".addslashes($mailParts["_REPLY_TO"]["email"])."',
+		'".addslashes($mailParts["_SENDER"]["email"])."',
+		'".addslashes($mailParts["message-id"])."',
+		'".addslashes($mailParts["subject"])."'
+		)";
+	$res = mysql(TYPO3_db,$query);
+}
+
+?>

@@ -1,19 +1,19 @@
 <?php
 /***************************************************************
 *  Copyright notice
-*  
+*
 *  (c) 2002-2004 Kasper Skårhøj (kasper@typo3.com)
 *  All rights reserved
 *
-*  This script is part of the Typo3 project. The Typo3 project is 
+*  This script is part of the Typo3 project. The Typo3 project is
 *  free software; you can redistribute it and/or modify
 *  it under the terms of the GNU General Public License as published by
 *  the Free Software Foundation; either version 2 of the License, or
 *  (at your option) any later version.
-* 
+*
 *  The GNU General Public License can be found at
 *  http://www.gnu.org/copyleft/gpl.html.
-* 
+*
 *  This script is distributed in the hope that it will be useful,
 *  but WITHOUT ANY WARRANTY; without even the implied warranty of
 *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -21,7 +21,7 @@
 *
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
-/** 
+/**
  * Plugin 'Mailing list/FAQ listing' for the 'maillisttofaq' extension.
  *
  * @author	Kasper Skårhøj <kasper@typo3.com>
@@ -29,69 +29,69 @@
 /**
  * [CLASS/FUNCTION INDEX of SCRIPT]
  *
- *  109: class tx_maillisttofaq_pi1 extends tslib_pibase 
- *  157:     function main($content,$conf)	
- *  204:     function listView($content,$conf)	
- *  390:     function listFAQ_HOWTO()	
- *  486:     function listArchive()	
- *  615:     function managerStatus()	
+ *  109: class tx_maillisttofaq_pi1 extends tslib_pibase
+ *  157:     function main($content,$conf)
+ *  204:     function listView($content,$conf)
+ *  390:     function listFAQ_HOWTO()
+ *  486:     function listArchive()
+ *  615:     function managerStatus()
  *
  *              SECTION: Functions generating HTML output
- *  857:     function listThreads($res)	
- *  879:     function pi_list_header()	
- *  912:     function pi_list_row($c)	
- *  997:     function pi_list_searchBox()	
- * 1019:     function categoryBox()	
- * 1084:     function singleView($content,$conf)	
- * 1388:     function moderatorFields($content,$cRow,$child=0)	
- * 1494:     function postForm()	
- * 1533:     function replyForm($replyUid,$ccEmails=array())	
- * 1603:     function printSingleFaqItems($record,$single=0)	
- * 1634:     function renderFAQForm($faqC,$faqUid)	
+ *  857:     function listThreads($res)
+ *  879:     function pi_list_header()
+ *  912:     function pi_list_row($c)
+ *  997:     function pi_list_searchBox()
+ * 1019:     function categoryBox()
+ * 1084:     function singleView($content,$conf)
+ * 1388:     function moderatorFields($content,$cRow,$child=0)
+ * 1494:     function postForm()
+ * 1533:     function replyForm($replyUid,$ccEmails=array())
+ * 1603:     function printSingleFaqItems($record,$single=0)
+ * 1634:     function renderFAQForm($faqC,$faqUid)
  *
  *              SECTION: Functions assisting the major display functions (above)
- * 1730:     function moderatorList()	
- * 1770:     function canModifyThread($threadModUser)	
- * 1784:     function getFaqItemCount($rootUid)	
- * 1800:     function processContent($str)	
- * 1821:     function searchWordReplaceArray()	
- * 1843:     function setStar($rating)	
- * 1856:     function pi_list_modeSelector($items=array())	
- * 1879:     function pi_list_browseresults($showResultCount=1,$tableParams="")	
- * 1935:     function expThreadsCheck()	
- * 1951:     function getFieldContent($fN)	
- * 1993:     function removeSubjectPrefix($str)	
- * 2006:     function getFieldHeader($fN)	
- * 2021:     function getFieldHeader_sortLink($fN,$label='')	
+ * 1730:     function moderatorList()
+ * 1770:     function canModifyThread($threadModUser)
+ * 1784:     function getFaqItemCount($rootUid)
+ * 1800:     function processContent($str)
+ * 1821:     function searchWordReplaceArray()
+ * 1843:     function setStar($rating)
+ * 1856:     function pi_list_modeSelector($items=array())
+ * 1879:     function pi_list_browseresults($showResultCount=1,$tableParams="")
+ * 1935:     function expThreadsCheck()
+ * 1951:     function getFieldContent($fN)
+ * 1993:     function removeSubjectPrefix($str)
+ * 2006:     function getFieldHeader($fN)
+ * 2021:     function getFieldHeader_sortLink($fN,$label='')
  *
  *              SECTION: Data processing functions
- * 2060:     function processingOfInData($pid,$rootUid=0)	
- * 2269:     function sendReplyMail($replyArray,$altEmail='')	
- * 2324:     function updateThread($itemUid)	
- * 2407:     function updateViewStat($type,$uid,$currentCount)	
- * 2428:     function getSticking()	
- * 2442:     function manageSticking()	
- * 2463:     function getFAQCategories()	
- * 2485:     function getOnlineUsers()	
- * 2514:     function getRootMessage($parent_uid,$maxLevels=50)	
- * 2542:     function getChildren($parent_uid,&$result,$fields='uid',$level=1,$enFields=1,$otCheck=0)	
- * 2568:     function getContentForMLitem($uid)	
- * 2583:     function getUserNameLink($fe_users_uid,$showUserUidPid=0,$prefix='')	
+ * 2060:     function processingOfInData($pid,$rootUid=0)
+ * 2269:     function sendReplyMail($replyArray,$altEmail='')
+ * 2324:     function updateThread($itemUid)
+ * 2407:     function updateViewStat($type,$uid,$currentCount)
+ * 2428:     function getSticking()
+ * 2442:     function manageSticking()
+ * 2463:     function getFAQCategories()
+ * 2485:     function getOnlineUsers()
+ * 2514:     function getRootMessage($parent_uid,$maxLevels=50)
+ * 2542:     function getChildren($parent_uid,&$result,$fields='uid',$level=1,$enFields=1,$otCheck=0)
+ * 2568:     function getContentForMLitem($uid)
+ * 2583:     function getUserNameLink($fe_users_uid,$showUserUidPid=0,$prefix='')
  *
  *              SECTION: MAIL transfer functions:
- * 2621:     function transferMailsFromInBox($number=10)	
- * 2656:     function storeMailInMLtable($row)	
- * 2765:     function collectOrphans()	
- * 2805:     function getPlainTextContentOut($cArr)	
- * 2854:     function htmlToPlain($in)	
- * 2871:     function searchForParent($items)	
+ * 2621:     function transferMailsFromInBox($number=10)
+ * 2656:     function storeMailInMLtable($row)
+ * 2765:     function collectOrphans()
+ * 2805:     function getPlainTextContentOut($cArr)
+ * 2854:     function htmlToPlain($in)
+ * 2871:     function searchForParent($items)
  *
  *              SECTION: MAIL FEED functions:
- * 2914:     function readMails($mconf)	
- * 2973:     function feedMails($mconf)	
+ * 2914:     function readMails($mconf)
+ * 2973:     function feedMails($mconf)
  *
  *              SECTION: Experimental / Development functions
- * 3031:     function makeFeUserStat($fe_user_uid)	
+ * 3031:     function makeFeUserStat($fe_user_uid)
  *
  */
 
@@ -104,7 +104,7 @@ require_once(PATH_t3lib.'class.t3lib_readmail.php');
 
 /**
  * Plugin class for the mailing list archive
- * 
+ *
  */
 class tx_maillisttofaq_pi1 extends tslib_pibase {
 
@@ -115,11 +115,11 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 	var $listEmail='';					// List email (where messages are sent to by the reply feature)
 	var $thisPID=0;						// The PID where messages/faq items are stored.
 
-		// used to divide messages for display - trying to remove the original message automatically. Can be extended with other divider strings.	
+		// used to divide messages for display - trying to remove the original message automatically. Can be extended with other divider strings.
 	var $messageDividers = array(
 		'-----Original Message-----'
 	);
-	
+
 		// Internal, fixed:
 	var $prefixId = 'tx_maillisttofaq_pi1';		// Same as class name
 	var $scriptRelPath = 'pi1/class.tx_maillisttofaq_pi1.php';	// Path to this script relative to the extension dir.
@@ -146,10 +146,10 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 		// Development:
 #	var $LLtestPrefix='##';		// This prefix will be put before all getLL labels - thus makes it easy to find which labels ARE translated and which are not.
 #	var $LLtestPrefixAlt='¤¤';
-	
+
 	/**
 	 * Main function, distributing the display load.
-	 * 
+	 *
 	 * @param	string		$content: Blank value. Not used
 	 * @param	array		$conf: TypoScript config for this plugin
 	 * @return	string		HTML content from this plugin, wrapped in <div>-section with class-attribute.
@@ -166,18 +166,18 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 			</div>
 			');
 		}
-		
+
 		$GLOBALS['TSFE']->pEncAllowedParamNames[$this->prefixId.'[showUid]']=1;
 		$GLOBALS['TSFE']->pEncAllowedParamNames[$this->prefixId.'[mode]']=1;
-		
+
 		switch((string)$conf['CMD'])	{
 			case 'singleView':
 				list($t) = explode(':',$this->cObj->currentRecord);
 				$this->internal['currentTable']=$t;
 				$this->internal['currentRow']=$this->cObj->data;
-				
+
 				$this->insertRecord=1;
-				
+
 				return $this->pi_wrapInBaseClass($this->singleView($content,$conf));
 			break;
 			default:
@@ -193,10 +193,10 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 			break;
 		}
 	}
-	
+
 	/**
 	 * Creates the listing of archive/faq/howto
-	 * 
+	 *
 	 * @param	string		Empty content string
 	 * @param	array		TypoScript options for plugin passed to this function
 	 * @return	string		HTML-content
@@ -209,16 +209,16 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 		$this->pi_loadLL();		// Loading the LOCAL_LANG values
 		$lConf = $this->conf['listView.'];	// Local settings for the listView function
 
-			// Preparing listing of the archive. 
+			// Preparing listing of the archive.
 			// First get manager/supervisor list, then online users, faq categories etc.
 		$modList = $this->moderatorList();	// Line is placed here because it fills in the ->mList array with the moderators of the list.
-		$this->getOnlineUsers();	// 
+		$this->getOnlineUsers();	//
 		$this->cache_fe_user_names=array();
 		$this->getFAQCategories();	// Getting FAQ categories
 
 			// Set isManager flag.
 		$this->isManager=isset($this->mList[$GLOBALS['TSFE']->fe_user->user['uid']]);
-		
+
 		if (is_array($this->conf['messageDividers.']))	{
 			foreach($this->conf['messageDividers.'] as $divStr)	{
 				if (is_string($divStr))	$this->messageDividers[]=quotemeta(trim($divStr));
@@ -233,7 +233,7 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 			$this->subjectPrefix=trim($this->cObj->data['tx_maillisttofaq_subjectprefix']);
 			$this->listEmail=trim($this->cObj->data['tx_maillisttofaq_listEmail']);
 		}
-		
+
 			// Set stat for search words.
 		if (!$this->isManager)	{	// Managers are not registered.
 			$sWstat = $GLOBALS['TSFE']->fe_user->getKey('ses','tx_maillisttofaq_sword');
@@ -246,8 +246,8 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 					'mode' =>  $this->piVars['mode']
 				);
 				$GLOBALS['TSFE']->fe_user->setKey('ses','tx_maillisttofaq_sword',$sWstat);
-	
-					// Storing the content of sWstat:			
+
+					// Storing the content of sWstat:
 				$ses_ref = t3lib_div::md5int($GLOBALS['TSFE']->fe_user->id);
 				$query = 'SELECT uid FROM tx_maillisttofaq_ml_searchstat WHERE ses_ref='.$ses_ref;
 				$res = mysql(TYPO3_db,$query);
@@ -260,10 +260,10 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 			}
 		}
 
-		
+
 
 			// If a single element should be displayed (and NOT faq/howto listing...)
-		if ($this->piVars['showUid'] && ($this->piVars['mode']!=4 && $this->piVars['mode']!=5))	{	
+		if ($this->piVars['showUid'] && ($this->piVars['mode']!=4 && $this->piVars['mode']!=5))	{
 			$this->internal['currentTable'] = 'tx_maillisttofaq_ml';
 			$this->internal['currentRow'] = $this->pi_getRecord('tx_maillisttofaq_ml',$this->piVars['showUid']);
 
@@ -275,7 +275,7 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 			return $content;
 		} else {
 				// Set pid for listing
-			$this->thisPID = intval($this->pi_getPidList($this->conf['pidList'],0));	
+			$this->thisPID = intval($this->pi_getPidList($this->conf['pidList'],0));
 
 				// Reading mails from external source? This will *pull* messages from another webserver which has a mail server that pipes the mailing list messages into the database.
 				// If we're lucky we'll get to read mails from external source
@@ -297,7 +297,7 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 					$this->transferMailsFromInBox(t3lib_div::intInRange($lConf['transfer_amount'],1,200));
 				}
 			}
-		
+
 				// Mode menu:
 			$items=array(
 				'1'=> $this->pi_getLL('list_mode_1','List'),
@@ -311,7 +311,7 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 				'6'=> $this->pi_getLL('list_mode_6','Thr. managed by me'),
 				'10'=> $this->pi_getLL('list_mode_10','Mgr. stat'),
 			);
-			
+
 				// If no login user, the 'My threads' + others are not visible.
 			if (!$GLOBALS['TSFE']->loginUser)	{
 				unset($items['3']);
@@ -338,14 +338,14 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 				// Removing defaults:
 			if (!$this->piVars['pointer'])		$this->piVars['pointer']='';		//... this should work, shouldn't it??
 			if (!strcmp($this->piVars['sort'],$this->conf['_DEFAULT_PI_VARS.']['sort']))	$this->piVars['sort']='';
-			
-			
+
+
 				// Put the whole list together:
 			$fullTable='';	// Clear var;
 
 				// Adds the mode selector.
 			$fullTable.=$this->pi_list_modeSelector($items);
-			
+
 			if ($this->isManager && $this->piVars['mode']==10)	{		// This is the manager view.
 				$fullTable.=$this->managerStatus();
 
@@ -355,7 +355,7 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 				if ($this->piVars['mode']!=4 && $this->piVars['mode']!=5)	{
 					$fullTable.=$this->expThreadsCheck();
 				}
-	
+
 					// QUERY / RENDERS THE LIST:
 					// FAQ / HOWTO:
 				if (($this->piVars['mode']==4 || $this->piVars['mode']==5))	{	// FAQ
@@ -363,17 +363,17 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 				} else {	// NORMAL listing of the _ml table.
 					$fullTable.=$this->listArchive();
 				}
-				
+
 				$fullTable.='<br/>';
-				
+
 					// Online users
 				if (count($this->onlineUsers))	{
 					$fullTable.='<p><strong>'.$this->pi_getLL('users_online','Users online').':</strong> '.implode(', ',$this->onlineUsers).'</p>';
 				}
-	
+
 					// Managers:
 				$fullTable.=$modList;
-				
+
 				$fullTable.= !$this->conf['listView.']['catSelTop'] ? $this->categoryBox() : '';
 			}
 
@@ -381,10 +381,10 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 			return $fullTable;
 		}
 	}
-	
+
 	/**
 	 * This will render the FAQ/HOWTO sections
-	 * 
+	 *
 	 * @return	string		HTML content
 	 */
 	function listFAQ_HOWTO()	{
@@ -395,7 +395,7 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 				if (!$this->isManager)	{	// Managers are not registered.
 					$this->updateViewStat('faq',$therow['uid'],$therow['view_stat']);
 				}
-				
+
 				if ($this->piVars['editFaqUid'])	{
 					$fullTable.=$this->renderFAQForm($therow,$therow['uid']);
 				} else {
@@ -415,7 +415,7 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 						'.$this->printSingleFaqItems($therow,1).'</div>';
 				}
 			}
-		} elseif ($this->piVars['editFaqUid']=='NEW') {	
+		} elseif ($this->piVars['editFaqUid']=='NEW') {
 			$fullTable.=$this->renderFAQForm(array('howto'=>intval($this->piVars['mode']==5)),'NEW');
 		} else {
 				// SAVING new...
@@ -437,13 +437,13 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 				$this->internal['orderBy'] = 'crdate';
 			}
 
-			
+
 			$addWhere = $this->piVars['mode']==4 ? ' AND howto=0' :  ' AND howto=1';
 			if (is_array($this->piVars['DATA']['selcat']))	{
 				$setCatInt=t3lib_div::intExplode(',',implode(',',$this->piVars['DATA']['selcat']));
 				$addWhere.=' AND cat IN ('.implode(',',$setCatInt).')';
 			}
-			
+
 				// Get number of records:
 			$query = $this->pi_list_query('tx_maillisttofaq_faq',1,$addWhere);
 #debug($query);
@@ -456,10 +456,10 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 			$res = mysql(TYPO3_db,$query);
 			if (mysql_error())	debug(array(mysql_error(),$query));
 			$this->internal['currentTable'] = 'tx_maillisttofaq_faq';
-			
+
 				// Adds the search box:
 			$fullTable.=$this->pi_list_searchBox();
-			
+
 				// Adds category box (possibly)
 			$fullTable.= $this->conf['listView.']['catSelTop'] ? $this->categoryBox() : '';
 
@@ -468,19 +468,19 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 
 				// Adds the whole list table
 			$fullTable.=$this->pi_list_makelist($res);
-			
+
 				// MAKE NEW
 			if ($GLOBALS['TSFE']->loginUser)	{
 				$fullTable.='<p>'.$this->pi_linkTP_keepPIvars($this->pi_getLL('makenewfaq','Make a new FAQ or HOWTO item.'),array('editFaqUid'=>'NEW')).'</p>';
 			}
 		}
-			
+
 		return $fullTable;
 	}
-	
+
 	/**
 	 * This will render the non-FAQ/HOWTO sections (That is the list archive in all modes)
-	 * 
+	 *
 	 * @return	string		HTML content
 	 */
 	function listArchive()	{
@@ -502,7 +502,7 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 			$orderBy.= ',tx_maillisttofaq_ml.'.$this->internal['orderBy'].($this->internal['descFlag']?' DESC':'').chr(10);
 		}
 
-			// Select all which are either root-items OR root-less replies (which should be 'fixed')			
+			// Select all which are either root-items OR root-less replies (which should be 'fixed')
 		$addWhere=' AND reply<=0 ';
 		$addWhere.=' AND ot_flag=0 ';	// By simply removing this check OT threads can be displayed.
 		if (is_array($this->piVars['DATA']['selcat']))	{
@@ -541,13 +541,14 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 				' AND tx_maillisttofaq_ml.pid IN ('.$pidList.')'.chr(10).
 				$this->cObj->enableFields('tx_maillisttofaq_ml').chr(10);	// This adds WHERE-clauses that ensures deleted, hidden, starttime/endtime/access records are NOT selected, if they should not! Almost ALWAYS add this to your queries!
 
-			$addWhere.=' '.$this->cObj->searchWhere($this->piVars['sword'],'all_content','tx_maillisttofaq_mlcontent');
+			#$addWhere.=' '.$this->cObj->searchWhere($this->piVars['sword'],'all_content','tx_maillisttofaq_mlcontent');
+			$addWhere.=' AND MATCH(all_content) AGAINST ("'.addslashes($this->piVars['sword']).'")';
 		}
-		
+
 		if ($this->piVars['answered_only'])	{
 			$addWhere.=' AND (answer_state=2 OR all_rating>0)';
 		}
-		
+#debug(array('tx_maillisttofaq_ml',1,$addWhere,'','',$orderBy,$preQ));
 			// Get number of records:
 		$query = $this->pi_list_query('tx_maillisttofaq_ml',1,$addWhere,'','',$orderBy,$preQ);
 #debug($query,2);
@@ -600,27 +601,27 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 			$fullTable.=$this->pi_list_makelist($res);
 		}
 		$GLOBALS['TT']->pull();
-			
+
 			// Adds the result browser:
 		$fullTable.=$this->pi_list_browseresults();
 
 		return $fullTable;
 	}
-	
+
 	/**
 	 * Will display the status of management of the threads and more.
-	 * 
-	 * @return	void		
+	 *
+	 * @return	void
 	 */
 	function managerStatus()	{
 		$thisMidnight = mktime(0,0,0);		// Returns seconds to this midnight date.
 		$weekday = (date('w')-1+7)%7;		// Weekday, monday being 0 (zero), sunday being 6
 		$thisWeekStart = $thisMidnight-$weekday*24*3600;
 		$weeks = 10;
-		
-			// ************************		
+
+			// ************************
 			// Collecting data from the database:
-			// ************************		
+			// ************************
 		$dat=array();
 		for($a=$weeks-1;$a>=0;$a--)	{
 			$dat[$a]=array();
@@ -648,9 +649,9 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 		}
 
 
-			// ************************		
+			// ************************
 			// Making the stat table:
-			// ************************		
+			// ************************
 
 		$trows=array();
 			// Header
@@ -677,7 +678,7 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 			}
 			$trows[]='<tr>'.implode('',$tcells).'</tr>';
 		}
-		
+
 		$tcells=array();
 		$tcells[]='<td><strong>All threads:</strong></td>';
 		for($a=$weeks-1;$a>=0;$a--)	{
@@ -694,12 +695,12 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 		<table border="1">'.implode('',$trows).'</table>';
 
 
-	
+
 		// ******************************************************************
 		// Threads with FAQ -request emails sent, but not yet produced.
 		// ******************************************************************
 
-		$query = 'SELECT tx_maillisttofaq_ml.faq_email_sent,tx_maillisttofaq_ml.uid,tx_maillisttofaq_ml.subject,tx_maillisttofaq_faq.thread FROM tx_maillisttofaq_ml LEFT JOIN tx_maillisttofaq_faq 
+		$query = 'SELECT tx_maillisttofaq_ml.faq_email_sent,tx_maillisttofaq_ml.uid,tx_maillisttofaq_ml.subject,tx_maillisttofaq_faq.thread FROM tx_maillisttofaq_ml LEFT JOIN tx_maillisttofaq_faq
 			ON tx_maillisttofaq_faq.thread=tx_maillisttofaq_ml.uid
 			WHERE tx_maillisttofaq_ml.faq_email_sent!="" '.
 			' AND tx_maillisttofaq_ml.reply<=0'.
@@ -717,7 +718,7 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 				$dat[strtolower($inf[0])]['threads'][$row['uid']]=$row;
 			}
 		}
-		
+
 		$trows=array();
 		foreach($dat as $k => $v)	{
 			$notMade = array();
@@ -741,7 +742,7 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 		<table border="1">'.implode('',$trows).'</table>';
 
 
-	
+
 		// ******************************************************************
 		// Search word statistics:
 		// ******************************************************************
@@ -758,7 +759,7 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 				foreach($dat as $item)	{
 					if ($item['search_submit'])	{
 						$kw=split("[ ,]",strtolower(trim($item['sword'])));
-			
+
 						while(list(,$val)=each($kw))	{
 							$val=trim($val);
 							if (strlen($val)>=2)	{
@@ -776,7 +777,7 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 						$url = $this->pi_linkTP_keepPIvars_url(array('showUid'=>$item['showUid']),0,1);
 						$logText.='---> Clicked: <a href="'.$url.'" target="_NEW_WINDOW">#'.$item['showUid'].': "'.htmlspecialchars(t3lib_div::fixed_lgd($subject['subject'],40)).'"</a>';
 					} else $logText='';
-					
+
 					if ($logText)	$logLines[]=$logText;
 				}
 			}
@@ -787,13 +788,13 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 				</tr>';
 			}
 		}
-		
+
 		$out.='
 		<h3>Search patterns of users:</h3>
 		<p>...</p>
 		<table border="1">'.implode('',$tRows).'</table>';
 
-		
+
 		$tRows=array();
 		arsort($searchWords);
 		foreach($searchWords as $k => $v)	{
@@ -810,7 +811,7 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 		<table border="1">'.implode('',$tRows).'</table>';
 
 
-		
+
 		if (count($this->mList))	{
 			$query='SELECT email FROM fe_users WHERE uid IN ('.implode(',',array_keys($this->mList)).')';
 			$res = mysql(TYPO3_db,$query);
@@ -822,24 +823,24 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 			<h3>Email list of managers and supervisors</h3>
 			<p>'.implode(', ',$list).'</p>';
 		}
-		
+
 		return $out.'<br/><br/>';
 	}
-	
-	
-	
-	
-	
-	
-	
-		
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	/***********************************************
 	 *
@@ -847,10 +848,10 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 	 *
 	 ***********************************************/
 
-	
+
 	/**
 	 * Returns the expanded-threads view, which is the alternative listing form compared to regular list of only thread starters.
-	 * 
+	 *
 	 * @param	pointer		MySQL result pointer
 	 * @return	string		HTML content for the expanded thread listing.
 	 */
@@ -873,7 +874,7 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 
 	/**
 	 * Display a header row for FAQ or ARCHIVE listing.
-	 * 
+	 *
 	 * @return	string		HTML
 	 */
 	function pi_list_header()	{
@@ -902,10 +903,10 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 				</tr>';
 		}
 	}
-	
+
 	/**
 	 * Display a single row in the normal list view of either FAQ or ARCHIVE items
-	 * 
+	 *
 	 * @param	integer		Count (row-number on this page)
 	 * @return	string		HTML content, table row.
 	 */
@@ -913,7 +914,7 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 			// Get 'editPanel' if available.
 		$editPanel = $this->pi_getEditPanel();
 		if ($editPanel)	$editPanel='<td>'.$editPanel.'</td>';
-		
+
 			// FAQ item? THen process that.
 		if ($this->internal['currentTable']=='tx_maillisttofaq_faq')	{
 			$showUserUidPid=intval($this->conf['tx_newloginbox_pi3-showUidPid']);
@@ -925,7 +926,7 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 					<td valign="top" align="center"><p>'.($this->internal['currentRow']['view_stat']?$this->internal['currentRow']['view_stat']:'-').'</p></td>
 					'.$editPanel.'
 				</tr>';
-		} else {	
+		} else {
 			// ARCHIVE items:
 				// Moderation:
 			$M='&nbsp;';
@@ -965,11 +966,11 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 				}
 			}
 			if (!$F)	$F='&nbsp;';
-						
+
 				// Check / Un-check
 			$checkUncheck = '<img src="'.t3lib_extMgm::siteRelPath('maillisttofaq').'res/'.($this->stickingElements[$this->internal['currentRow']['uid']]?'':'un').'checked.gif" width="13" height="13" border="0" alt="">';
 			$checkUncheck = $this->pi_linkTP_keepPIvars($checkUncheck,array('DATA'=>array('stick'=>$this->internal['currentRow']['uid'].':'.($this->stickingElements[$this->internal['currentRow']['uid']]?0:1))));
-			
+
 # BASICALLY this was just to update all threads in a way... Definitely a dev.thing.
 #$this->updateThread($this->internal['currentRow']['uid']);
 			return '<tr'.($this->internal['currentRow']['sticky'] ? $this->pi_classParam('listrow-sticky') : ($c%2 ? $this->pi_classParam('listrow-odd') : '')).'>
@@ -991,7 +992,7 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 	/**
 	 * Returns a Search box for the listing (for both FAQ or ARCHIVE listing)
 	 * Extends the original function in pibase class.
-	 * 
+	 *
 	 * @return	string		HTML-string with a search box for the archive, both mailing list and FAQ
 	 */
 	function pi_list_searchBox()	{
@@ -1013,7 +1014,7 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 
 	/**
 	 * Returns a select category box
-	 * 
+	 *
 	 * @return	string		HTML string with category selector box.
 	 */
 	function categoryBox()	{
@@ -1034,7 +1035,7 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 					 ' GROUP BY cat';
 		} else {	// NORMAL listing of the _ml table.
 			$query = 'SELECT cat,count(*) FROM tx_maillisttofaq_ml WHERE pid IN ('.$this->thisPID.')
-					 AND reply<=0 
+					 AND reply<=0
 					 AND ot_flag=0
 					 '.$this->cObj->enableFields('tx_maillisttofaq_ml').
 					 ' GROUP BY cat';
@@ -1043,13 +1044,13 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 		while($cRow=mysql_fetch_assoc($res))	{
 			$countDat[intval($cRow['cat'])]=$cRow['count(*)'];
 		}
-		
+
 		while(list($catuid,$catrec)=each($this->categories))	{
 			$cc = intval($countDat[$catuid]);
 			if ($cc)	{
 				$cLabel = ' [ '.$cc.' ]';
 				$opt[]='<option value="'.$catuid.'"'.(in_array($catuid,$selOptions)?' SELECTED':'').'>'.htmlspecialchars($catrec['title']).$cLabel.'</option>';
-			} 
+			}
 		}
 		$GLOBALS['TT']->pull();
 
@@ -1059,7 +1060,7 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 		} else {
 			$sP = '';
 		}
-		 
+
 			// Search box design:
 		$sTables = '<div'.$this->pi_classParam('catbox').'>'.
 			(!$this->conf['listView.']['catSelNoHeader'] ? '<h3>'.htmlspecialchars($this->pi_getLL('Categories','Categories')).':</h3>' : '').
@@ -1072,11 +1073,11 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 		</table></div>';
 		return $sTables;
 	}
-	
+
 	/**
 	 * Display single thread.
 	 * Called both when a thread is displayed from the listing and when a single-item is displayed by the insert-records feature.
-	 * 
+	 *
 	 * @param	string		Formalized content variable - not just, just pass blank value or whatever.
 	 * @param	array		TypoScript array for the WHOLE plugin!
 	 * @return	string		HTML output with the listing of the thread
@@ -1089,7 +1090,7 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 			// Look up root-message / thread starter and use that UID
 		$rootUid = intval($this->getRootMessage($this->internal['currentRow']['uid']));
 		$showUserUidPid=intval($this->conf['tx_newloginbox_pi3-showUidPid']);
-		
+
 		$content='';
 		if ($rootUid)	{
 				// If moderation is enabled, load clipboard:
@@ -1113,24 +1114,24 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 			if (isset($this->piVars['DATA']['_moderate_return'])) {
 #debug("BLBALBAL");
 				header('Location: '.t3lib_div::locationHeaderUrl($this->pi_linkTP_keepPIvars_url(array('showUid'=>''))));
-			}			
-			
+			}
+
 				// If the OT flag is set for a root item then the thread is NOT displayed at all!
 			if (!$rootItem['ot_flag'])	{
 					// Getting root-record content:
 				$rootItem['content'] = $this->getContentForMLitem($rootItem['uid']);
-	
+
 					// Header:
 				$headerCode = '<h3'.$this->pi_classParam('subject').'>'.htmlspecialchars($this->removeSubjectPrefix($rootItem['moderated_subject']?$rootItem['moderated_subject']:$rootItem['subject'])).'</h3>';
 				$content.= $headerCode;
-				
+
 					// Init faq vars:
 				$FAQcontent=array();
 				$FAQcontrib=array();
 				$faqC=array();
 				$faqC['subject']=$rootItem['subject'];
 				$faqC['question'] = trim($rootItem['content']);
-				
+
 					// MENU: IF login user is present, show menu for options:
 				$cmdLinks='';
 				$modOK=0;
@@ -1146,7 +1147,7 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 						$cmdLinks='<p'.$this->pi_classParam('cmd').'>'.$cmdLinks.'</p>';
 						$content.=$cmdLinks;
 					}
-	
+
 					if ($this->piVars['cmd']=='mod')	{
 						if (!$modOK)	{
 							$this->piVars['cmd']='';
@@ -1161,14 +1162,14 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 						}
 					}
 				}
-	
+
 					// Getting children:
 				$result=array();
 				$children = $this->getChildren($rootUid,$result,'uid,mail_date,sender_name,sender_email,fe_user,subject,ot_flag,moderator_note,moderator_fe_user,rating',1,1,
 //								$this->piVars['cmd']=='mod'?0:1);
 								0);
 				$tempROW=$this->internal['currentRow'];
-	
+
 					// Thread menu:
 				$prevID=0;
 				$threadMenu='';
@@ -1185,7 +1186,7 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 				if ($threadMenu)	{
 					$content.='<div'.$this->pi_classParam('thrMenu').'><p'.$this->pi_classParam('threadLinks').'>'.$this->pi_getLL('pilistsear_threadAnswers','').'</p>'.$threadMenu.'</div>';
 				}
-	
+
 					// Print main message
 				$content.='<p'.$this->pi_classParam('author').'><strong>'.$this->getFieldContent('mail_date').'</strong>&nbsp; '.$this->pi_getLL('pilistsear_by','').' &nbsp;<strong>'.
 					$this->getFieldContent('sender_name').', &nbsp; '.
@@ -1219,7 +1220,7 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 						}
 					}
 				}
-				
+
 					// Print thread items:
 				reset($result);
 				while(list($kk,$resRec)=each($result))	{
@@ -1243,10 +1244,10 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 						$this->getFieldContent('sender_email').' &nbsp; '.
 						($resRec['fe_user'] ? ' &nbsp; '.$this->getUserNameLink($resRec['fe_user'],$showUserUidPid,'<img src="t3lib/gfx/i/'.(isset($this->mList[$resRec['fe_user']])?'user2':'fe_users').'.gif" width="18" height="16" border="0" align="absmiddle">'): '').
 						'</strong></p>';
-						
+
 					if ($this->piVars['cmd']=='mod' || !$resRec['ot_flag'])	{
 						$msgContent= $this->getContentForMLitem($resRec['uid']);
-		
+
 						if ($this->piVars['cmd']=='mod')	{
 	#debug($this->piVars['full']);
 							if (!$this->piVars['full'])	{
@@ -1259,7 +1260,7 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 							$FAQcontent[] = '---------------------------------------';
 							$FAQcontent[] = trim($msgContent);
 							$FAQcontent[] = "\n\n\n\n\n";
-							
+
 							$FAQcontrib[$resRec['sender_email']]=($resRec['sender_name']?$resRec['sender_name']:$resRec['sender_email']);
 						} else {
 							$msgContentParts = split(implode('|',$this->messageDividers),$msgContent,2);
@@ -1284,14 +1285,14 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 								}
 							}
 						}
-						
+
 						$reply.='<p>'.$msgContent.'</p>';
 							// Saved-my-day answer
 						if (!$this->insertRecord && $GLOBALS['TSFE']->loginUser && $GLOBALS['TSFE']->fe_user->user['uid']!=$resRec['fe_user'])	{
 							$reply.='<p'.$this->pi_classParam('saveday').'>'.$this->pi_linkTP_keepPIvars($this->pi_getLL('pilistsear_clickHereIfThis',''),array('DATA'=>array('answerSavedDay'=>$resRec['uid']))).'</p>';
 						}
 		#debug($resRec['rating'],1);
-					} else {	// ot: 
+					} else {	// ot:
 						if ($this->conf['listView.']['showHiddenOTmsgHeaders'])	{
 							$reply.='<p><em>'.$this->pi_getLL('pilistsear_hiddenOffTopicBy','').'</em></p>';
 						} else $reply='';
@@ -1299,7 +1300,7 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 					$content.=$reply?'<div'.$this->pi_classParam('reply'.$Mprefix).' style="margin-left:'.($resRec['_LEVEL']*20).'px;" name="childUid'.$resRec['uid'].'" id="childUid'.$resRec['uid'].'">'.$reply.'</div>':'';
 				}
 				$this->internal['currentRow']=$tempROW;
-	
+
 					// Management:
 				if ($this->internal['currentRow']['moderator_fe_user'])	{
 					$content.='<p'.$this->pi_classParam('managed').'>'.$this->pi_getLL('pilistsear_thisThreadHasBeen','').' '.$this->mList[$this->internal['currentRow']['moderator_fe_user']].'</p>';
@@ -1322,16 +1323,16 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 				if ($this->piVars['cmd']=='faq')	{
 					$content=$headerCode;
 					$content.='<p'.$this->pi_classParam('back').'>'.$this->pi_linkTP_keepPIvars($this->pi_getLL('pilistsear_backToThread',''),array('cmd'=>'','full'=>'','editFaqUid'=>'')).'</p>';
-	
+
 					$content.='<h4>'.$this->pi_getLL('pilistsear_makingAFaqItem','').'</h4>';
-					
+
 					$content.='<p>'.implode('</p><p>',t3lib_div::trimExplode(chr(10),trim($this->pi_getLL('pilistsear_theDocumentationOfTypo3','')))).'</p>';
-					
+
 					$content.='<br/>';
 
 					$faqC['answer'] = implode(chr(10),$FAQcontent)."\n\n\n---------------\n".$this->pi_getLL('pilistsear_contributers','').":\n".implode(chr(10),$FAQcontrib);
 					$faqUid='NEW';
-					
+
 					if ($this->piVars['editFaqUid'])	{
 						$faqC=$this->pi_getRecord('tx_maillisttofaq_faq',$this->piVars['editFaqUid']);
 						if (!is_array($faqC))	{
@@ -1340,7 +1341,7 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 							$faqUid = $faqC['uid'];
 						}
 					}
-					
+
 					$content.=$this->renderFAQForm($faqC,$faqUid);
 				}
 				if ($this->piVars['cmd']=='mod')	{
@@ -1349,16 +1350,16 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 						<input type="submit" name="'.$this->prefixId.'[DATA][_moderate]" value="'.$this->pi_getLL('modview_submit').'">
 						<input type="submit" name="'.$this->prefixId.'[DATA][_moderate_return]" value="'.$this->pi_getLL('modview_submitreturn').'">
 						<input type="submit" name="'.$this->prefixId.'[DATA][_cancel]" value="'.$this->pi_getLL('modview_cancel').'">
-						
+
 						<input type="hidden" name="'.$this->prefixId.'[cmd]" value=""></form>';
 				}
 			}
-			
+
 				// Finalize output:
 			if ($this->piVars['cmd']!='faq' && !$this->insertRecord)	{
 				$back='<p'.$this->pi_classParam('back').'>'.$this->pi_list_linkSingle($this->pi_getLL('moderatorf_back',''),0).'</p>';
 			} else $back='';
-			
+
 				// If insertRecord link to thread
 			if ($this->insertRecord)	{
 				$content.='<p'.$this->pi_classParam('back').'>'.
@@ -1371,15 +1372,15 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 				'.$content.'
 				'.$back.'
 			</div>'.$this->pi_getEditPanel();
-		}			
+		}
 
 		return $content;
-	}	
-	
+	}
+
 	/**
 	 * This makes the form fields for moderators of a thread
 	 * The function is called recursively from the singleView function, one time for each message
-	 * 
+	 *
 	 * @param	string		The content of the message
 	 * @param	array		The message row.
 	 * @param	boolean		1 if the message is a child-message (has a parent record)
@@ -1387,7 +1388,7 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 	 */
 	function moderatorFields($content,$cRow,$child=0)	{
 		$out='';
-		
+
 			// Only for thread starters:
 		if (!$child)	{
 			$out.='<br/><input type="submit" name="'.$this->prefixId.'[DATA][_moderate]" value="'.$this->pi_getLL('modview_submit').'"> '.
@@ -1399,14 +1400,14 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 			$out.='<input type="hidden" value="'.htmlspecialchars($cRow['subject']).'" name="'.$this->prefixId.'[DATA]['.$cRow['uid'].'][subject]">';	// Original subject submitted for comparison.
 			$out.='<input type="text" value="'.htmlspecialchars(trim($cRow['moderated_subject']) ? $cRow['moderated_subject'] : $cRow['subject']).'" name="'.$this->prefixId.'[DATA]['.$cRow['uid'].'][moderated_subject]" style="'.$this->conf['listView.']['textarea_style'].'"><br/>';
 
-				// Answer state for thread starter.			
+				// Answer state for thread starter.
 			$out.='<p><strong>'.$this->pi_getLL('modview_astate','Answer state').':</strong></p>';
 			$out.='<select name="'.$this->prefixId.'[DATA]['.$cRow['uid'].'][answer_state]">
 						<option value="0"></option>
 						<option value="1"'.($cRow['answer_state']==1?' selected="selected"':'').'>'.$this->pi_getLL('modview_stillnotanswered','Needs answer').'</option>
 						<option value="2"'.($cRow['answer_state']==2?' selected="selected"':'').'>'.$this->pi_getLL('modview_answered','Answered').'</option>
 					</select>';
-					
+
 			if ($cRow['faq_email_sent'])	{
 				$out.='<p><em>Email request to create a FAQ item was sent to "'.htmlspecialchars($cRow['faq_email_sent']).'"</em></p>';
 			} else {
@@ -1452,7 +1453,7 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 		$out.='<br/>';
 			// Set manager-fe_user value (hidden field)
 		$out.='<input type="hidden" value="'.$GLOBALS['TSFE']->fe_user->user['uid'].'" name="'.$this->prefixId.'[DATA]['.$cRow['uid'].'][moderator_fe_user]">';
-		
+
 			// OT-check box:
 		$out.='<input type="hidden" value="0" name="'.$this->prefixId.'[DATA]['.$cRow['uid'].'][ot_flag]">';
 		$out.='<p><input type="checkbox" value="1" name="'.$this->prefixId.'[DATA]['.$cRow['uid'].'][ot_flag]"'.($cRow['ot_flag']?' CHECKED':'').'>'.$this->pi_getLL('modview_othide','OT / Hide').'</p>';
@@ -1460,7 +1461,7 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 			// Move
 		$out.='<input type="hidden" value="0" name="'.$this->prefixId.'[DATA]['.$cRow['uid'].'][_move]">';
 		$out.='<p><input type="checkbox" value="'.htmlspecialchars(t3lib_div::fixed_lgd($this->removeSubjectPrefix($cRow['subject']),50).' / '.trim($cRow['sender_name'].' <'.$cRow['sender_email'].'>')).'" name="'.$this->prefixId.'[DATA]['.$cRow['uid'].'][_move]"'.($this->clip[$cRow['uid']]?' checked="checked"':'').'>'.$this->pi_getLL('modview_move','Mark node for moving').' (#'.$cRow['uid'].')</p>';
-		
+
 			// Paste in thread
 		if (is_array($this->clip) && count($this->clip))	{
 			$out.='<p>'.$this->pi_getLL('modview_paste','Select a node to paste as reply to this message').':</p>';
@@ -1488,13 +1489,13 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 
 	/**
 	 * Post form for archive messages
-	 * 
+	 *
 	 * @return	string		HTML content for the form.
 	 */
 	function postForm()	{
 		if ($GLOBALS['TSFE']->loginUser && $GLOBALS['TSFE']->fe_user->user['email'])	{
 			$url = $this->pi_linkTP_keepPIvars_url(array('reply'=>''));
-			
+
 			$content='<form action="'.$url.'" method="post" style="margin: 0px 0px 0px 0px;">
 				<p'.$this->pi_classParam('rpHead').'>'.$this->pi_getLL('moderatorf_onlinePost','').'</p>
 				<p>'.$this->pi_getLL('moderatorf_from','').' <em>'.htmlspecialchars($GLOBALS['TSFE']->fe_user->user['name'].' <'.$GLOBALS['TSFE']->fe_user->user['email'].'>').'</em></p>
@@ -1508,7 +1509,7 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 	).'
 				</textarea><br/>
 				<input type="checkbox" name="'.$this->prefixId.'[DATA][reply][cc]" value="1">'.$this->pi_getLL('moderatorf_ccMySelf','').'<br/>
-				
+
 				<p'.$this->pi_classParam('notice').'><strong>'.$this->pi_getLL('moderatorf_notice','').'</strong> '.nl2br(sprintf(trim($this->pi_getLL('moderatorf_youEmMustEm','')),$GLOBALS['TSFE']->fe_user->user['email'])).'</p>
 				<input type="hidden" value="'.htmlspecialchars($GLOBALS['TSFE']->fe_user->user['name']).'" name="'.$this->prefixId.'[DATA][reply][name]">
 				<input type="hidden" value="'.htmlspecialchars($GLOBALS['TSFE']->fe_user->user['email']).'" name="'.$this->prefixId.'[DATA][reply][email]">
@@ -1518,14 +1519,14 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 			$content='<div'.$this->pi_classParam('postForm').'>
 					'.$content.'
 				</div>';
-			
+
 			return $content;
 		}
 	}
 
 	/**
 	 * Reply form for archive messages
-	 * 
+	 *
 	 * @param	integer		Uid of the messag to which a response should be sent.
 	 * @param	[type]		$ccEmails: ...
 	 * @return	string		HTML contnet for the form.
@@ -1533,18 +1534,18 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 	function replyForm($replyUid,$ccEmails=array())	{
 		if ($GLOBALS['TSFE']->loginUser && $GLOBALS['TSFE']->fe_user->user['email'])	{
 			$url = $this->pi_linkTP_keepPIvars_url(array('reply'=>''));
-			
-			$replyTo = $this->pi_getRecord('tx_maillisttofaq_ml',$replyUid);			
+
+			$replyTo = $this->pi_getRecord('tx_maillisttofaq_ml',$replyUid);
 			if (is_array($replyTo))	{
 				$subject='Re: '.$replyTo['subject'];
 				$expStr=$this->subjectPrefix;
-				
+
 					// Get reply text:
 				$indentedMsg = $this->getContentForMLitem($replyUid);
 				$charWidth=t3lib_div::intInRange($this->conf['listView.']['replyIndented_BreakNumChar'],20,1000,80);
 				$indentedMsg = t3lib_div::breakTextForEmail($indentedMsg,"\n",$charWidth);
 				$indentedMsg = "> ".implode(chr(10)."> ",explode(chr(10),$indentedMsg));
-				
+
 				if (trim($expStr))	{
 					list($pre,$subject) = explode($expStr,$replyTo['subject'],2);
 #	debug(array($pre,$subject));
@@ -1575,7 +1576,7 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 
 					<input type="checkbox"  name="'.$this->prefixId.'[DATA][reply][cc]" value="1">'.$this->pi_getLL('moderatorf_ccMySelf','').'<br/>
 					'.(count($ccEmails) ? '<input type="checkbox"  name="'.$this->prefixId.'[DATA][reply][cc_email]" value="'.htmlspecialchars(implode(',',$ccEmails)).'">'.sprintf($this->pi_getLL('moderatorf_ccAll',''),$this->conf['listView.']['daysBeforeDirectNotificationsWhenReply']).'<br/><p><em>('.htmlspecialchars(implode(', ',$ccEmails)).')</em></p>' : '').'
-					
+
 					<p'.$this->pi_classParam('notice').'><strong>'.$this->pi_getLL('moderatorf_notice','').'</strong> '.nl2br(sprintf(trim($this->pi_getLL('moderatorf_youEmMustEm','')),$GLOBALS['TSFE']->fe_user->user['email'])).'</p>
 					<input type="hidden" value="'.htmlspecialchars($subject).'" name="'.$this->prefixId.'[DATA][reply][subject]">
 					<input type="hidden" value="'.htmlspecialchars($replyTo['message_id']).'" name="'.$this->prefixId.'[DATA][reply][message_id]">
@@ -1583,19 +1584,19 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 					<input type="hidden" value="'.htmlspecialchars($GLOBALS['TSFE']->fe_user->user['email']).'" name="'.$this->prefixId.'[DATA][reply][email]">
 					<input type="submit" name="'.$this->prefixId.'[DATA][_send_reply]" value="'.$this->pi_getLL('moderatorf_sendreply','').'" onClick="return confirm(unescape(\''.rawurlencode($this->pi_getLL('moderatorf_nowYouAreA','')).'\'));"> <input type="submit" name="'.$this->prefixId.'[DATA][_cancel]" value="'.$this->pi_getLL('printsingl_cancel','').'">
 				</form>';
-	
+
 				$content='<div'.$this->pi_classParam('replyForm').'>
 						'.$content.'
 					</div>';
 			}
-			
+
 			return $content;
 		}
 	}
 
 	/**
 	 * Prints a single FAQ item with link to editing.
-	 * 
+	 *
 	 * @param	array		The FAQ item record
 	 * @param	boolean		If set it allows the form to place a link back to the original thread from which is sprung originally.
 	 * @return	string		HTML output returned.
@@ -1609,7 +1610,7 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 
 		$content.='<p'.$this->pi_classParam('faqa').'><span'.$this->pi_classParam('faqahead').'>'.$this->pi_getLL('printsingl_answer','').'</span><br/> '.nl2br($this->processContent(htmlspecialchars(trim($record['answer'])))).'</p>';
 		$content.=trim($record['pre'])?'<br/><p><strong>'.$this->pi_getLL('printsingl_codeListing','').'</strong></p><pre'.$this->pi_classParam('faqapre').'>'.$this->processContent(htmlspecialchars(trim($record['pre']))).'</pre>':'';
-		
+
 		$link='';
 		$showUserUidPid=intval($this->conf['tx_newloginbox_pi3-showUidPid']);
 		if ($GLOBALS['TSFE']->loginUser && ($record['fe_user']==$GLOBALS['TSFE']->fe_user->user['uid'] || isset($this->mList[$GLOBALS['TSFE']->fe_user->user['uid']])))	{
@@ -1626,14 +1627,14 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 
 	/**
 	 * This makes the form for entry of a FAQ item.
-	 * 
+	 *
 	 * @param	array		The FAQ/HOWTO item record
 	 * @param	integer		The uid field of the item record
 	 * @return	string		HTML content for the FAQ/HOWTO editing form
 	 */
 	function renderFAQForm($faqC,$faqUid)	{
 		$content='';
-		
+
 			// Subject:
 		$content.='<br/>';
 
@@ -1669,11 +1670,11 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 		$content.='<p>'.$this->pi_getLL('renderfaqf_ifTheAnswerIncludes','').'</p>';
 		$content.='<textarea cols="80" rows="5" style="'.$this->conf['listView.']['textarea_style'].'" nowrap name="'.$this->prefixId.'[DATA]['.$faqUid.'][pre]">'.t3lib_div::formatForTextarea($faqC['pre']).'</textarea><br/>';
 		$content.='<br/>';
-		
+
 		if (isset($this->mList[$GLOBALS['TSFE']->fe_user->user['uid']]))	{
 			$content.='<p><strong>'.$this->pi_getLL('renderfaqf_categoryModerators','').'</strong></p>';
 			$content.='<p>'.$this->pi_getLL('renderfaqf_selectTheCategoryWhere','').'</p>';
-			
+
 			$opt=array();
 			$opt[]='<option value="0"></option>';
 			$opt[]='<option value="-1"'.($faqC['cat']==-1?' SELECTED':'').'>'.$this->pi_getLL('renderfaqf_unmoderatedItems','').'</option>';
@@ -1686,8 +1687,8 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 			$content.='<input type="hidden" name="'.$this->prefixId.'[DATA]['.$faqUid.'][cat]" value="'.($faqUid=='NEW' ? -1 : $faqC['cat']).'">';
 #			$content.=($faqUid=="NEW" ? -1 : $faqC["cat"]);
 		}
-		
-		
+
+
 
 		if (isset($this->mList[$GLOBALS['TSFE']->fe_user->user['uid']]) && $faqUid!='NEW')	{
 			$content.='<p><input type="checkbox" name="'.$this->prefixId.'[DATA]['.$faqUid.'][hidden]" value="1"> '.$this->pi_getLL('renderfaqf_deleteVisibleForModerators','').'</p>';
@@ -1713,7 +1714,7 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 
 
 
-	
+
 
 	/***********************************************
 	 *
@@ -1724,7 +1725,7 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 	/**
 	 * Creates the HTML-output for the list of managers and supervisors as shown under the thread archive form.
 	 * Will select managers and supervisors from the tt_content fields 'tx_maillisttofaq_moderators' and 'tx_maillisttofaq_supervisors' (and thus requires the plugin to be fired up from a tt_content element)
-	 * 
+	 *
 	 * @return	string		HTML-output
 	 */
 	function moderatorList()	{
@@ -1757,27 +1758,27 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 		if (count($this->sList))	{
 			$output.= '<p><strong>'.$this->pi_getLL('supervisors','Supervisors:').'</strong> '.implode(', ',$this->sList).'</p>';
 		}
-		
+
 		return $output;
 	}
-	
+
 	/**
 	 * Returns true if the current user is allowed as manager OR supervisor to manage a certain thread.
-	 * 
+	 *
 	 * @param	integer		UID of the fe_user which are CURRENTLY managing the thread (zero if no manager has been assigned).
 	 * @return	boolean		True if management is OK
 	 */
 	function canModifyThread($threadModUser)	{
-		if ($GLOBALS['TSFE']->loginUser && 
-				isset($this->mList[$GLOBALS['TSFE']->fe_user->user['uid']]) && 
+		if ($GLOBALS['TSFE']->loginUser &&
+				isset($this->mList[$GLOBALS['TSFE']->fe_user->user['uid']]) &&
 				(!$threadModUser || $threadModUser==$GLOBALS['TSFE']->fe_user->user['uid'] || $this->sList[$GLOBALS['TSFE']->fe_user->user['uid']]))	{
-					return 1;		
+					return 1;
 		}
 	}
-	
+
 	/**
 	 * Returns the number of faq items for a _ml root record (thread starter)
-	 * 
+	 *
 	 * @param	integer		The UID of the thread-starting message from the _ml table.
 	 * @return	integer		The number of FAQ items written for this particular thread (found in this PID)
 	 */
@@ -1793,7 +1794,7 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 
 	/**
 	 * Processes the mail list content with http:// and email address and search words made into links.
-	 * 
+	 *
 	 * @param	string		The input string to process for http:// and email addresses.
 	 * @return	string		The processed string
 	 */
@@ -1801,7 +1802,7 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 		$conf=array();
 		$conf['keep']='scheme,path,query';
 		$str = $this->cObj->http_makelinks($str,$conf);
-		
+
 		$str = str_replace('@','(at)',$str);
 #		$str = str_replace('@','&#'.ord('@').';',$str);
 
@@ -1809,13 +1810,13 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 		if (count($srArr))	{
 			$str = str_replace($srArr['search'],$srArr['replace'],$str);
 		}
-		
+
 		return $str;
 	}
-	
+
 	/**
 	 * Generates a Search-word replace array based on search words found in piVars[sword]
-	 * 
+	 *
 	 * @return	array		Array of search words if any are found in piVars[sword]
 	 */
 	function searchWordReplaceArray()	{
@@ -1836,7 +1837,7 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 
 	/**
 	 * Set rating-star based on input value.
-	 * 
+	 *
 	 * @param	integer		The rating value. If larger than zero a star-icon is returned and the image text will indicate the rating level.
 	 * @return	string		The HTML for the star-icon. If no start, then blank value.
 	 */
@@ -1849,7 +1850,7 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 	/**
 	 * Returns a list mode selector, clickmenu in a table.
 	 * This function is overriding a function in the parent class, pibase
-	 * 
+	 *
 	 * @param	array		The elements to put into the mode selector.
 	 * @return	string		HTML content for the mode selector.
 	 */
@@ -1862,7 +1863,7 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 				$this->pi_linkTP($v,array($this->prefixId=>array('mode'=>$k,'expThr'=>$this->piVars['expThr']))).
 				'</p></td>';
 		}
-		
+
 		$sTables = '<div'.$this->pi_classParam('modeSelector').'><table>
 			<tr>'.implode('',$cells).'</tr>
 		</table></div>';
@@ -1871,13 +1872,13 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 
 	/**
 	 * Returns a results browser (copy from PIbase)
-	 * 
+	 *
 	 * @param	boolean		$showResultCount: Whether or not to display result counter
 	 * @param	string		$tableParams: attributes for the table-tag
 	 * @return	string		HTML content
 	 */
 	function pi_list_browseresults($showResultCount=1,$tableParams="")	{
-			
+
 			// Initializing variables:
 		$pointer=$this->piVars["pointer"];
 		$count=$this->internal["res_count"];
@@ -1887,16 +1888,16 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 		$pointer=intval($pointer);
 		$links=array();
 
-		
+
 			// BEGIN. THIS section is added to make the pages-browsing "dynamic"
 		$offset=0;
 		if ($pointer > $max/2)	{
 			$offset=t3lib_div::intInRange($pointer-($max/2),0,t3lib_div::intInRange(ceil($count/$results_at_a_time)-$maxPages,0));
 		}
 			// END.
-			
 
-			// Make browse-table/links:	
+
+			// Make browse-table/links:
 		if ($this->pi_alwaysPrev>=0)	{
 			if ($pointer>0)	{
 				$links[]='<td nowrap><p>'.$this->pi_linkTP_keepPIvars($this->pi_getLL("pi_list_browseresults_prev","< Previous"),array("pointer"=>($pointer-1?$pointer-1:"")),0).'</p></td>';
@@ -1910,7 +1911,7 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 		if ($pointer<ceil($count/$results_at_a_time)-1)	{
 			$links[]='<td nowrap><p>'.$this->pi_linkTP_keepPIvars($this->pi_getLL("pi_list_browseresults_next","Next >"),array("pointer"=>$pointer+1)).'</p></td>';
 		}
-		
+
 		$pR1 = $pointer*$results_at_a_time+1;
 		$pR2 = $pointer*$results_at_a_time+$results_at_a_time;
 		$sTables = '<DIV'.$this->pi_classParam("browsebox").'>'.
@@ -1929,12 +1930,12 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 
 	/**
 	 * Makes checkbox for expanded threads. This has an onclick handler which will reload the page with the piVars[expThr] inversed from its current state.
-	 * 
+	 *
 	 * @return	string		HTML content for the checkbox
 	 */
 	function expThreadsCheck()	{
 		$url = $this->pi_linkTP_keepPIvars_url(array('expThr'=>$this->piVars['expThr']?'':1));
-		
+
 		$content = '<form action="'.t3lib_div::getIndpEnv('REQUEST_URI').'" method="post" style="margin: 0px 0px 0px 0px;">
 		<input type="checkbox" name="_" value="" onClick="document.location=unescape(\''.rawurlencode($url).'\');"'.($this->piVars['expThr']?' CHECKED':'').'> '.$this->pi_getLL('getfieldco_expandedThreadsView','').'
 		</form>';
@@ -1944,7 +1945,7 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 
 	/**
 	 * Returns content for a given field
-	 * 
+	 *
 	 * @param	string		Fieldname from $this->internal["currentRow"] for which to get the value. The value is formatted.
 	 * @return	string		The formatted value.
 	 */
@@ -1983,10 +1984,10 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 			break;
 		}
 	}
-	
+
 	/**
 	 * Returns the input string but where the first occurance of $this->subjectPrefix (eg. "[Typo3]") has been removed.
-	 * 
+	 *
 	 * @param	string		Input string (subject)
 	 * @return	string		Output
 	 */
@@ -1996,10 +1997,10 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 		}
 		return $str;
 	}
-	
+
 	/**
 	 * Returns header value for a field
-	 * 
+	 *
 	 * @param	string		Field name
 	 * @return	string		The label for the field header, probably found in locallang file.
 	 */
@@ -2010,10 +2011,10 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 			break;
 		}
 	}
-	
+
 	/**
 	 * Returns the header value with sorting-link put on
-	 * 
+	 *
 	 * @param	string		Field name
 	 * @param	string		Alternative label, overriding the one that would otherwise come from ->getFieldHeader()
 	 * @return	string		The label for the field header, probably found in locallang file.
@@ -2026,23 +2027,23 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 		} else {	// Otherwise set default order depending on fieldtype:
 			$sortStr.= t3lib_div::inList('all_replies,all_latest,view_stat,crdate,mail_date',$fN)?1:0;
 		}
-		
+
 		return $this->pi_linkTP_keepPIvars($label?$label:$this->getFieldHeader($fN),array('sort'=>$sortStr));
 	}
-	
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	/***********************************************
 	 *
@@ -2052,7 +2053,7 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 
 	/**
 	 * This function processes the submitted data in all kinds of situations: Management of threads, sending replys, marking an answered as "Saved my day" etc.
-	 * 
+	 *
 	 * @param	integer		For FAQ/HOWTO items: The PID where to create the FAQ record.
 	 * @param	integer		For FAQ/HOWTO items: The reference uid to the mailing list thread from which it was created.
 	 * @return	mixed		-1 = OK, otherwise error string
@@ -2071,7 +2072,7 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 							$res = mysql(TYPO3_db,$query);
 							$this->updateThread($savedDayUid);
 							return -1;
-						}			
+						}
 					}
 				}
 
@@ -2097,7 +2098,7 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 								if (!isset($this->mList[$GLOBALS['TSFE']->fe_user->user['uid']]))	{
 									unset($dataArr['hidden']);
 								}
-								
+
 								$query = $this->cObj->DBgetUpdate('tx_maillisttofaq_faq', $uid, $dataArr, 'subject,question,question_pre,answer,pre,last_edited_by,cat,hidden,howto');
 								$res = mysql(TYPO3_db,$query);
 								if (mysql_error())	{
@@ -2122,7 +2123,7 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 								$dataArr = $recContent;
 								unset($dataArr['parent']);
 								unset($dataArr['reply']);
-								
+
 									// If the 'moderated_subject' is no different from the original subject, then it is not written into the field.
 								if (!strcmp($dataArr['subject'],$dataArr['moderated_subject']))	{
 									$dataArr['moderated_subject']='';
@@ -2132,7 +2133,7 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 									// Send FAQ email:
 								if ($dataArr['faq_email_sent'] && t3lib_div::validEmail($dataArr['faq_email_sent']))	{
 									$postMsg=array();
-									
+
 									$postMsg['email']=$this->conf['faq_email.']['admin_email'] ? $this->conf['faq_email.']['admin_email'] : $GLOBALS['TSFE']->fe_user->user['email'];
 									$postMsg['name']=$GLOBALS['TSFE']->fe_user->user['name'].' - '.$this->conf['faq_email.']['admin_name'];
 									$postMsg['subject']=trim($this->pi_getLL('faq_email_subj'));
@@ -2153,21 +2154,21 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 									$this->sendReplyMail($postMsg,$dataArr['faq_email_sent']);
 
 									$dataArr['faq_email_sent'].=' '.date('d-m-Y H:i');
-#$dataArr['faq_email_sent']='';									
+#$dataArr['faq_email_sent']='';
 								} else unset($dataArr['faq_email_sent']);
-								
+
 									// break;
 								if ($recContent['_break'])	{
 									$break_threads[]=$uid;
 									$dataArr['parent']=0;
 									$dataArr['reply']=0;
 								}
-								
+
 									// move;
 								if ($recContent['_move'])	{
 									$clip[$uid]=$recContent['_move'];
 								} else unset($clip[$uid]);
-								
+
 									// paste
 								if ($recContent['_paste'])	{
 									$uidToMove = intval($recContent['_paste']);
@@ -2187,12 +2188,12 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 												$this->updateThread($uidToMove_rec['parent']);
 #debug('UPDATE THR:'.$uidToMove_rec['parent']);
 											}
-											
+
 											unset($clip[$uidToMove]);
 										} else return 'ERROR: Could not find the record of the mail you are trying to paste... strange.';
 									} else return 'ERROR: You tried to paste a message (#'.$recContent['_paste'].') as a reply to itself (or sub-reply found in list "'.$rootLineUidsFromHere.'")';
 								}
-								
+
 								if ($recContent['_sendAsReply'] && $this->listEmail)	{
 									$replyToMsg = $GLOBALS['TSFE']->sys_page->getRawRecord('tx_maillisttofaq_ml',$uid);
 
@@ -2205,11 +2206,11 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 										if ($_subject)	$fakeReply['subject']='Re: '.trim($this->subjectPrefix).' '.trim($_subject);
 									}
 
-				
+
 									$fakeReply['message_id']=$replyToMsg['message_id'];
 									$fakeReply['cc_email']=$replyToMsg['sender_email'];
 									$fakeReply['msg']=str_replace('//',chr(10),$recContent['moderator_note']).'
-									
+
 '.$this->pi_getLL('mgrNoticeFooter').'
 ';
 									$this->sendReplyMail($fakeReply);
@@ -2234,7 +2235,7 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 							} else return 'ERROR: YOU were not a moderator!';
 						}
 					}
-					
+
 						// Store clipboard
 					$GLOBALS['TSFE']->fe_user->setKey('ses','tx_maillisttofaq_clip',$clip);
 
@@ -2258,10 +2259,10 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 			} else return 'ERROR: No fe-user.';
 		}
 	}
-	
+
 	/**
 	 * Sending a mail / reply to the list.
-	 * 
+	 *
 	 * @param	array		Array with the data to send
 	 * @param	[type]		$altEmail: ...
 	 * @return	string		Error message if applicable. Otherwise void
@@ -2282,14 +2283,14 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 			$recip = ($altEmail?$altEmail:$this->listEmail).
 						($replyArray['cc_email']?','.$replyArray['cc_email']:'').
 						($replyArray['cc']?','.$replyArray['email']:'');
-			
+
 				// Seeing if the subject must be QP'ed (that is testing if any QP is added to string and if so ONLY QP the part of the string that is affected - otherwise the mailman software might not remove any [Typo3] prefixes because it apparently doesn't decode the subject!)
 			$temp_subject=explode('=',t3lib_div::quoted_printable($replyArray['subject'],1000),2);
 			$finalSubject = $temp_subject[0];	// First part - no problem
 			if (strlen($temp_subject[1]))	{	// Second part - if exists, then do something.
 				$finalSubject.= '=?'.$charset.'?Q?'.t3lib_div::quoted_printable(ereg_replace('[[:space:]]','_',substr($replyArray['subject'],strlen($temp_subject[0]))),1000).'?=';
 			}
-			
+
 /*			debug(array(
 				$recip,
 				trim($finalSubject),
@@ -2313,24 +2314,24 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 #					debug($this->piVars['DATA']);
 		} else return 'ERROR: You did not specify a subject! No mail was sent.';
 	}
-	
+
 	/**
 	 * This takes a uid of a _ml record and will update the whole thread with new "cached" information (like last-entry, number of items etc).
 	 * Call this function when a new record has been inserted into the thread or if something else has changed.
-	 * 
+	 *
 	 * @param	integer		UID of any element in a thread.
-	 * @return	void		
+	 * @return	void
 	 */
 	function updateThread($itemUid)	{
 		// Get root item:
 		$rootItem = intval($this->getRootMessage($itemUid));
 		if ($rootItem)	{
 			$rootRecord = $this->pi_getRecord('tx_maillisttofaq_ml',$rootItem);
-			
+
 				// Getting children:
 			$result=array();
 			$children = $this->getChildren($rootItem,$result,'uid,mail_date,subject,sender_name,sender_email,ot_flag,rating,moderator_fe_user,fe_user',1,0);
-			
+
 				// Going through the children:
 			$all_content='';
 			$uidList=array();
@@ -2339,7 +2340,7 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 			$replyCount=0;
 			$ratingAccum=0;
 			$modStatus=0;
-			
+
 
 			$mailDate[]=$rootRecord['mail_date'];
 			$all_content.=' '.$rootRecord['subject'];
@@ -2353,7 +2354,7 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 				if (!$resRec['ot_flag']) $replyCount++;
 				if (!$resRec['moderator_fe_user'])	$modStatus--;
 				$ratingAccum+=$resRec['rating'];
-				
+
 				$uidList[]=$resRec['uid'];
 				if ($resRec['fe_user'])	{$replyUsers[]=intval($resRec['fe_user']);}
 				$mailDate[]=$resRec['mail_date'];
@@ -2380,13 +2381,13 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 				moderator_status=".$modStatus.",
 				all_useruidlist='".$replyUserList."',
 				all_replies=".$replyCount.",
-				all_rating=".$ratingAccum.", 
+				all_rating=".$ratingAccum.",
 				all_latest=".intval(count($mailDate)?max($mailDate):0)." WHERE uid=".$rootItem;
 			$res2=mysql(TYPO3_db,$query);
 			$query="UPDATE tx_maillisttofaq_mlcontent SET all_content='".addslashes($all_content)."' WHERE ml_uid=".$rootItem;
 			$res2=mysql(TYPO3_db,$query);
 
-				// UPDATE children:			
+				// UPDATE children:
 			if (count($uidList))	{
 				$query="UPDATE tx_maillisttofaq_ml SET moderator_status=".$modStatus.", reply=1, all_replies=".$replyCount.", all_latest=".intval(max($mailDate))." WHERE uid IN (".implode(',',$uidList).")";
 				$res2=mysql(TYPO3_db,$query);
@@ -2395,14 +2396,14 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 			}
 		}
 	}
-	
+
 	/**
 	 * Updates the view-stat field of _ml or _faq records
-	 * 
+	 *
 	 * @param	string		$type: If "faq" then the faq-table is updated. Default is "_ml" table.
 	 * @param	integer		$uid: The UID of the element for which to increase the view-count
 	 * @param	integer		$currentCount: The current view-stat value. This is re-written to the record after being increased by one.
-	 * @return	void		
+	 * @return	void
 	 */
 	function updateViewStat($type,$uid,$currentCount)	{
 		$didReg = $GLOBALS['TSFE']->fe_user->getKey('ses','tx_maillisttofaq_view_stat');
@@ -2419,11 +2420,11 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 #debug(array($query));
 		}
 	}
-	
+
 	/**
 	 * Get sticker-elements: Loads the internal array $this->stickingElements with "ml_uid"/"uid" pairs for the CURRENT fe_user
-	 * 
-	 * @return	void		
+	 *
+	 * @return	void
 	 */
 	function getSticking()	{
 		$this->stickingElements=array();
@@ -2436,8 +2437,8 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 
 	/**
 	 * Manage sticker-elements for the current logged in user. Expect a form to be sent with the [DATA][stick] input being an array with thread starters marked for sticking.
-	 * 
-	 * @return	void		
+	 *
+	 * @return	void
 	 */
 	function manageSticking()	{
 		if (is_array($this->piVars['DATA']) && $this->piVars['DATA']['stick'] && $GLOBALS['TSFE']->loginUser)	{
@@ -2457,37 +2458,37 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 
 	/**
 	 * Get categories from storage folder loaded into internal array, $this->categories
-	 * 
-	 * @return	void		
+	 *
+	 * @return	void
 	 */
 	function getFAQCategories()	{
 		$d=$GLOBALS['TSFE']->getStorageSiterootPids();
-		$storagePID = intval($d['_STORAGE_PID']);		
-		
+		$storagePID = intval($d['_STORAGE_PID']);
+
 		$query = 'SELECT * FROM tx_maillisttofaq_faqcat WHERE pid='.$storagePID.
 				$this->cObj->enableFields('tx_maillisttofaq_faqcat').
 				' ORDER BY title';
 
 		$this->categories=array();
-		
+
 		$res = mysql(TYPO3_db,$query);
 		while($row=mysql_fetch_assoc($res))	{
 			$this->categories[$row['uid']]=$row;
 		}
 	}
-	
+
 	/**
 	 * Select online users from storage folder and into internal array, $this->onlineUsers, where key is 'uid' and value is the users name (looked up by $this->getUsersNameLink)
 	 * Online users are users with their 'is_online' value set within the last 10 minutes (default)
-	 * 
-	 * @return	void		
+	 *
+	 * @return	void
 	 */
 	function getOnlineUsers()	{
 		$d=$GLOBALS['TSFE']->getStorageSiterootPids();
-		$storagePID = intval($d['_STORAGE_PID']);		
-		
+		$storagePID = intval($d['_STORAGE_PID']);
+
 		$showUserUidPid=intval($this->conf['tx_newloginbox_pi3-showUidPid']);
-		
+
 		$query = 'SELECT uid,username FROM fe_users WHERE is_online>'.(time()-60*10).
 				$this->cObj->enableFields('fe_users').
 				' ORDER BY is_online DESC';
@@ -2502,18 +2503,18 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 			}
 		}
 	}
-	
+
 	/**
 	 * This will go back in the "root-line" of any message in the _ml table and return the id-list of elements found in the rootline.
 	 * Use "intval()" on the output to get the uid of the root-record!
-	 * 
+	 *
 	 * @param	integer		UID from _ml table to get parent root line for.
 	 * @param	integer		Max levels - a security for not ending in endless recursivity
 	 * @return	string		Comma list of UIDs
 	 */
 	function getRootMessage($parent_uid,$maxLevels=50)	{
 		if ($maxLevels<=0)	return '';
-		
+
 		$query='SELECT parent FROM tx_maillisttofaq_ml WHERE uid='.intval($parent_uid);
 		$res2=mysql(TYPO3_db,$query);
 		if ($row2=mysql_fetch_assoc($res2))	{
@@ -2530,7 +2531,7 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 	 * The return value is a table with the structure hierarchically arranged.
 	 * The pass-by-reference array $result will have the same records but in a plain list.
 	 * Designed for recursive calling
-	 * 
+	 *
 	 * @param	integer		The parent record UID to get children for.
 	 * @param	array		Flat list of records
 	 * @param	string		List of fields to select and include in return value.
@@ -2541,7 +2542,7 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 	 */
 	function getChildren($parent_uid,&$result,$fields='uid',$level=1,$enFields=1,$otCheck=0)	{
 		if (intval($parent_uid)<=0)	return;
-		
+
 		$rows=array();
 		$query='SELECT '.$fields.' FROM tx_maillisttofaq_ml WHERE parent='.intval($parent_uid).
 			' AND pid="'.$this->thisPID.'"'.
@@ -2551,7 +2552,7 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 		while ($row2=mysql_fetch_assoc($res2))	{
 			$result[$row2['uid']]=$row2;
 			$result[$row2['uid']]['_LEVEL']=$level;
-			
+
 			$rows[$row2['uid']]=$row2;
 			$sub=$this->getChildren($row2['uid'],$result,$fields,$level+1,$enFields,$otCheck);
 			if (count($sub))	$rows[$row2['uid']]['SUB']=$sub;
@@ -2561,7 +2562,7 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 
 	/**
 	 * Get content for a _ml element
-	 * 
+	 *
 	 * @param	integer		UID of the ml-item to get content for.
 	 * @return	string		Content for the item given by parameter.
 	 */
@@ -2571,10 +2572,10 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 		$row=mysql_fetch_assoc($res);
 		return $row['content'];
 	}
-	
+
 	/**
 	 * Returns the user name of a fe_users.uid
-	 * 
+	 *
 	 * @param	integer		UID of the fe_user to find the name for.
 	 * @param	integer		PID of the page where details for this user is displayed
 	 * @param	string		Any string before the username. Is used here to put an icon before the name.
@@ -2584,7 +2585,7 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 		if ($fe_users_uid)	{
 			if (!isset($this->cache_fe_user_names[$fe_users_uid]))	{
 				$R_URI = t3lib_div::getIndpEnv('REQUEST_URI');
-				
+
 				$fe_user_rec = $this->pi_getRecord('fe_users', $fe_users_uid);
 				$this->cache_fe_user_names[$fe_users_uid] = $prefix.($showUserUidPid ? $this->pi_linkToPage($fe_user_rec['username'],$showUserUidPid,'',array('tx_newloginbox_pi3[showUid]' => $fe_user_rec['uid'], 'tx_newloginbox_pi3[returnUrl]'=>$R_URI)) : $fe_user_rec['username']);
 			}
@@ -2593,18 +2594,18 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 	}
 
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
+
+
+
+
+
 
 	/***********************************************
 	 *
@@ -2614,9 +2615,9 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 
 	/**
 	 * This will select the [$number] most recent mails from the 'inbox' - the 'inmail' table.
-	 * 
+	 *
 	 * @param	integer		Number of mails to select at a time.
-	 * @return	void		
+	 * @return	void
 	 */
 	function transferMailsFromInBox($number=10)	{
 			// Make query:
@@ -2625,12 +2626,12 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 
 			// Find storage PID
 		$d=$GLOBALS['TSFE']->getStorageSiterootPids();
-		$this->storagePID = intval($d['_STORAGE_PID']);		
+		$this->storagePID = intval($d['_STORAGE_PID']);
 
 			// Selecting:
 		$res = mysql(TYPO3_db,$query);
 		echo mysql_error();
-		
+
 			// Storing result in archive table:
 		$c=0;
 		$this->mailParser = t3lib_div::makeInstance('t3lib_readmail');
@@ -2641,16 +2642,16 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 
 		$GLOBALS['TT']->setTSlogMessage('Transferring '.$number.' mails from "inmail" table ('.$c.' selected)');
 		$GLOBALS['TT']->setTSlogMessage('Query: '.$query);
-		
+
 			// Now, looking for mails which did not arrive in the right order and therefore did not correctly relate to a thread.
 		$this->collectOrphans();
 	}
-	
+
 	/**
 	 * This takes a record from the _inmail table and parses the content, puts it in relation to the records in the _ml table
-	 * 
+	 *
 	 * @param	array		Record from "inmail" table.
-	 * @return	void		
+	 * @return	void
 	 * @internal
 	 */
 	function storeMailInMLtable($row)	{
@@ -2669,7 +2670,7 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 		$mlRow['mail_date']=$fullDecodedMailParts['_DATE'];
 		$mlRow['raw_mail_uid']=$row['uid'];
 		$mlRow['pid']=$this->thisPID;
-	
+
 
 			// Find fe_user of the sender_email
 		if ($mlRow['sender_email'])	{
@@ -2684,7 +2685,7 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 			// Finding plain text content from mime (or not) message
 		$mlRow_content['content'] = $this->getPlainTextContentOut($fullDecodedMailParts['CONTENT']);
 		$mlRow['content_lgd'] = strlen($mlRow_content['content']);
-		
+
 			// -------------------------------------
 			// Searching for relation/reply parent.
 			// ---
@@ -2715,7 +2716,7 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 			if (!$TRYED && trim($expStr))	{
 				list($pre,$subject) = explode($expStr,$fullDecodedMailParts['subject'],2);
 				$pre = trim(strtolower($pre));
-		
+
 				if ($pre && (strstr($pre,'re:') || strstr($pre,'aw:')))	{
 					$mlRow['reply']=-1;	// Means that this is supposed to be a reply.
 					$subject=$expStr.$subject;
@@ -2745,7 +2746,7 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 			$nres=mysql(TYPO3_db,$query);
 			if (!mysql_error())	{
 				$newId = mysql_insert_id();
-				
+
 					// Update content table:
 				$query = "INSERT INTO tx_maillisttofaq_mlcontent (content,orig_compr_content,ml_uid) VALUES ('".addslashes($mlRow_content['content'])."', '".addslashes($this->conf['storeCompressedOriginalContent']?gzcompress($mlRow_content['content']):'')."', '".$newId."')";
 				$nres=mysql(TYPO3_db,$query);
@@ -2759,13 +2760,13 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 	/**
 	 * Looking for mails which did not arrive in the right order and therefore did not correctly relate to a thread (reply=-1)
 	 * With such mails we try to look up their relation again. If found we update the mail/thread and all is find ('reply' is then changed to 1). If no thread could be found still, we change reply to '-2' - and thus we will not bother with it anymore.
-	 * 
+	 *
 	 * @return	string		The plain text content.
 	 */
 	function collectOrphans()	{
 		$query = 'SELECT * FROM tx_maillisttofaq_ml WHERE reply=-1';
 		$res = mysql(TYPO3_db,$query);
-		
+
 			// For each of the mails with 'reply'=-1:
 		while($row=mysql_fetch_assoc($res))	{
 			$items = array_unique(t3lib_div::trimExplode(' ',$row['references_list'],1));
@@ -2798,7 +2799,7 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 
 	/**
 	 * This will try to get some plain text content out of the parsed BODY section of a message.
-	 * 
+	 *
 	 * @param	mixed		Array or string with mail body content. Normally you pass the value of key ['CONTENT'] from the result of ->fullParse() function
 	 * @return	string		The plain text content.
 	 */
@@ -2813,7 +2814,7 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 					break;
 				}
 			}
-			
+
 			if (!$foundPlain)	{
 				$foundHTML=0;
 				reset($cArr);
@@ -2824,7 +2825,7 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 						break;
 					}
 				}
-				
+
 				if (!$foundHTML)	{
 					reset($cArr);
 					while(list($k,$v)=each($cArr))	{
@@ -2844,10 +2845,10 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 		}
 		return $output;
 	}
-	
+
 	/**
 	 * Converts text/html content from HTML-emails to text/plain, basically converting selected entities (eg. '&oslash;' to 'ø')
-	 * 
+	 *
 	 * @param	string		Input string with entities
 	 * @return	string		Output string with entities converted to characters.
 	 */
@@ -2864,7 +2865,7 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 	/**
 	 * This will search for the parent message-id for an array of message-ids (relations + in-reply-to fields)
 	 * Example: $items = array_unique(t3lib_div::trimExplode(' ',$fullDecodedMailParts['in-reply-to'].' '.$fullDecodedMailParts['references'],1));
-	 * 
+	 *
 	 * @param	array		Values are message ids from "references" and/or "in-reply-to" felds
 	 * @return	integer		0: Not a reply, since no references are input (empty input array); >0: Parent found, value is the UID of that parent; -1: No parent message was found. Should probably be looked up later or by other means!
 	 */
@@ -2874,7 +2875,7 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 		reset($items);
 		while(list(,$value)=each($items))	{
 			$value = ereg_replace('[[:space:]]','',$value);	// Some references has been found to have spaces in them, eg "blablabl.d e>" - which is preceived as an error. Probably it is. Not many mails were like this.
-			
+
 			$reply=-1;
 			$query="SELECT uid FROM tx_maillisttofaq_ml WHERE pid='".$this->thisPID."' AND message_id_hash='".md5($value)."'";
 
@@ -2886,17 +2887,17 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 		}
 		return $reply;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
+
+
+
+
 
 	/***********************************************
 	 *
@@ -2907,9 +2908,9 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 	/**
 	 * Pulls mails off another server and into the inmail-table.
 	 * The idea is that the remove inmail table is synchronized with local inmail table.
-	 * 
+	 *
 	 * @param	array		TypoScript configuration for the "readmail" function.
-	 * @return	void		
+	 * @return	void
 	 */
 	function readMails($mconf)	{
 			// Find the latest UID:
@@ -2925,7 +2926,7 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 		$p.= '&tx_maillisttofaq_pi1[readMails_pass]='.addslashes($mconf['password']);
 		$p.= '&tx_maillisttofaq_pi1[readMails_compr]='.function_exists('gzcompress');
 		$url = $mconf['url'].$p;
-		
+
 			// Read the remote content.
 		$GLOBALS["TT"]->setTSlogMessage('READMAIL: Getting content from "'.$url.'"');
 		$content = t3lib_div::getUrl($url);
@@ -2937,7 +2938,7 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 		if ($md5 == md5($contentPart))	{	// Checking integrity
 			if ($compression && function_exists('gzcompress'))		$contentPart = gzuncompress($contentPart);
 			$contentPart = unserialize($contentPart);
-				
+
 				// If we are here the result is well received and we insert the records into the database.
 			if (is_array($contentPart['rows']))	{
 				foreach($contentPart['rows'] as $mailrow)	{
@@ -2966,9 +2967,9 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 	/**
 	 * Feeding mails to a remote webserver which want records from the "inmail" table
 	 * This function will exit brutally (after echoing out the content stream), never returning anything.
-	 * 
+	 *
 	 * @param	array		TypoScript configuration for the "readmail" function.
-	 * @return	void		
+	 * @return	void
 	 */
 	function feedMails($mconf)	{
 			// Init data arrays
@@ -2982,7 +2983,7 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 			if (!$mconf['password'] || !strcmp($this->piVars['readMails_pass'],$mconf['password']))	{
 				$readMailsFrom = intval($this->piVars['readMails']);
 				$count = t3lib_div::intInRange($this->piVars['readMails_count'],1,100,10);
-				
+
 				$query = 'SELECT * FROM tx_maillisttofaq_inmail WHERE uid>='.$readMailsFrom.
 						' ORDER BY uid LIMIT 0,'.$count;
 				$res = mysql(TYPO3_db,$query);
@@ -2996,25 +2997,25 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 			// Prepare out-stream.
 		$outstream = serialize($outrows);
 		if ($compression)	$outstream = gzcompress($outstream);
-		
+
 		echo md5($outstream).':'.($compression?1:0).':'.$outstream;
 		exit;
 	}
-	
-	
-	
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 	/***********************************************
 	 *
@@ -3024,7 +3025,7 @@ class tx_maillisttofaq_pi1 extends tslib_pibase {
 
 	/**
 	 * Makes stat over fe_user
-	 * 
+	 *
 	 * @param	[type]		$fe_user_uid: ...
 	 * @return	[type]		...
 	 */

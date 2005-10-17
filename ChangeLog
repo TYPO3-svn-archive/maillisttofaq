@@ -1,3 +1,8 @@
+2005-10-17  Kasper Skårhøj  <kasper2005@typo3.com>
+
+ * Added FULLTEXT index to "all_content" field and made the search function use that.
+
+
 2004-11-15  Michael Stucki  <michael@typo3.org>
 
  * Starting to use a Changelog

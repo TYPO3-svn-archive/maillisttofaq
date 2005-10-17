@@ -35,7 +35,7 @@ CREATE TABLE tx_maillisttofaq_faq (
 	howto tinyint(4) unsigned DEFAULT '0' NOT NULL,
 	target_aud tinyint(4) unsigned DEFAULT '0' NOT NULL,
 	view_stat int(11) DEFAULT '0' NOT NULL,
-	
+
 	PRIMARY KEY (uid),
 	KEY parent (pid)
 );
@@ -85,7 +85,7 @@ CREATE TABLE tx_maillisttofaq_ml (
 	cat int(11) DEFAULT '0' NOT NULL,
 	view_stat int(11) DEFAULT '0' NOT NULL,
 	content_lgd int(11) DEFAULT '0' NOT NULL,
-	
+
 	PRIMARY KEY (uid),
 	KEY idhash (message_id_hash),
 	KEY parent (pid,reply,hidden,deleted,mail_date)
@@ -113,8 +113,11 @@ CREATE TABLE tx_maillisttofaq_mlcontent (
 	content text NOT NULL,
 	orig_compr_content blob NOT NULL,
 	all_content mediumtext NOT NULL,
+	FULLTEXT (all_content),
 	PRIMARY KEY (ml_uid)
-);
+) TYPE=MyISAM;
+
+ALTER TABLE tx_maillisttofaq_mlcontent TYPE=MyISAM
 
 #
 # Table structure for table 'tx_maillisttofaq_faqcat'
@@ -128,7 +131,7 @@ CREATE TABLE tx_maillisttofaq_faqcat (
 	deleted tinyint(4) unsigned DEFAULT '0' NOT NULL,
 	hidden tinyint(4) unsigned DEFAULT '0' NOT NULL,
 	title tinytext NOT NULL,
-	
+
 	PRIMARY KEY (uid),
 	KEY parent (pid)
 );
